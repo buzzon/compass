@@ -8,13 +8,8 @@ import java.util.Objects;
 @Entity
 public class Passenger {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    @OneToOne(mappedBy = "passenger")
-    private PassengerProfile passengerProfile;
-
-    @OneToOne(mappedBy = "passenger")
-    private Ticket ticket;
 
     @NotNull
     @NotEmpty
