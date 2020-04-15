@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <style>
         table td{
@@ -10,38 +10,45 @@
         }
 
     </style>
+    <title>Error</title>
 </head>
 <body>
-<h1>Error</h1>
 <table>
     <tr>
         <td>Date</td>
-        <td th:text="${timestamp}"/>
+        <!--/*@thymesVar id="timestamp" type="java.lang.String"*/-->
+        <td th:text="${timestamp}"></td>
     </tr>
     <tr>
         <td>Path</td>
-        <td th:text="${path}"/>
+        <!--/*@thymesVar id="path" type="java.lang.String"*/-->
+        <td th:text="${path}"></td>
     </tr>
     <tr>
         <td>Error</td>
-        <td th:text="${error}"/>
+        <!--/*@thymesVar id="error" type="java.lang.String"*/-->
+        <td th:text="${error}"></td>
     </tr>
     <tr>
         <td>Status</td>
-        <td th:text="${status}"/>
+        <!--/*@thymesVar id="status" type="java.lang.String"*/-->
+        <td th:text="${status}"></td>
     </tr>
     <tr>
         <td>Message</td>
-        <td th:text="${message}"/>
+        <!--/*@thymesVar id="message" type="java.lang.String"*/-->
+        <td th:text="${message}"></td>
     </tr>
     <tr>
         <td>Exception</td>
-        <td th:text="${exception}"/>
+        <!--/*@thymesVar id="exception" type="java.lang.String"*/-->
+        <td th:text="${exception}"></td>
     </tr>
     <tr>
         <td>Trace</td>
         <td>
-            <pre th:text="${trace}"/>
+            <!--/*@thymesVar id="trace" type="java.lang.String"*/-->
+            <pre th:text="${trace}"></pre>
         </td>
     </tr>
 </table>
