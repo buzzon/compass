@@ -1,9 +1,8 @@
 package ru.naumen.compass.service;
 
-import ru.naumen.compass.entity.Passenger;
+import ru.naumen.compass.entity.UserAccount;
 
 public interface RegistrationService {
-    void save(Passenger passenger);
-
-    Passenger findByUsername(String username);
+    void save(UserAccount userAccount);
+    UserAccount findByUsername(String username);
 }

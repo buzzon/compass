@@ -6,7 +6,8 @@ import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
-public class Passenger {
+@Table(name = "user_account")
+public class UserAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -19,7 +20,7 @@ public class Passenger {
     @NotEmpty
     private String password;
 
-    public Passenger() {
+    public UserAccount() {
     }
 
     public Long getId() {
@@ -50,10 +51,10 @@ public class Passenger {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Passenger passenger = (Passenger) o;
-        return Objects.equals(id, passenger.id) &&
-                Objects.equals(username, passenger.username) &&
-                Objects.equals(password, passenger.password);
+        UserAccount userAccount = (UserAccount) o;
+        return Objects.equals(id, userAccount.id) &&
+                Objects.equals(username, userAccount.username) &&
+                Objects.equals(password, userAccount.password);
     }
 
     @Override

@@ -3,27 +3,25 @@ package ru.naumen.compass.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.naumen.compass.entity.Passenger;
-import ru.naumen.compass.repository.PassengerRepository;
-
-import java.util.HashSet;
+import ru.naumen.compass.entity.UserAccount;
+import ru.naumen.compass.repository.UserAccountRepository;
 
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
     @Autowired
-    private PassengerRepository passengerRepository;
+    private UserAccountRepository userAccountRepository;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public void save(Passenger passenger) {
-        passenger.setPassword(bCryptPasswordEncoder.encode(passenger.getPassword()));
-        passengerRepository.save(passenger);
+    public void save(UserAccount userAccount) {
+        userAccount.setPassword(bCryptPasswordEncoder.encode(userAccount.getPassword()));
+        userAccountRepository.save(userAccount);
     }
 
     @Override
-    public Passenger findByUsername(String username) {
-        return passengerRepository.findByUsername(username);
+    public UserAccount findByUsername(String username) {
+        return userAccountRepository.findByUsername(username);
     }
 }

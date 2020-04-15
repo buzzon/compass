@@ -9,3 +9,4 @@ public class CompassApplication {
 		SpringApplication.run(CompassApplication.class, args);
 	}
 }
+

@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import ru.naumen.compass.entity.Passenger;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import ru.naumen.compass.entity.UserAccount;
 import ru.naumen.compass.service.RegistrationService;
 import ru.naumen.compass.service.SecurityService;
-import ru.naumen.compass.validator.PassengerValidator;
+import ru.naumen.compass.validator.UserAccountValidator;
 
 @Controller
 public class RegistrationController {
@@ -19,24 +21,24 @@ public class RegistrationController {
     private SecurityService securityService;
 
     @Autowired
-    private PassengerValidator passengerValidator;
+    private UserAccountValidator userAccountValidator;
 
     @GetMapping("/registration")
     public String showRegistrationForm(Model model){
-        model.addAttribute("passenger", new Passenger());
+        model.addAttribute("UserAccount", new UserAccount());
         return "registration";
     }
 
     @PostMapping("/registration")
-    public String registration(@ModelAttribute("passenger") Passenger passengerForm, BindingResult bindingResult) {
-        passengerValidator.validate(passengerForm, bindingResult);
+    public String registration(@ModelAttribute("UserAccount") UserAccount userAccount, BindingResult bindingResult) {
+        userAccountValidator.validate(userAccount, bindingResult);
 
         if (bindingResult.hasErrors()) {
             return "registration";
         }
 
-        registrationService.save(passengerForm);
-        securityService.autoLogin(passengerForm.getUsername(), passengerForm.getPassword());
+        registrationService.save(userAccount);
+        securityService.autoLogin(userAccount.getUsername(), userAccount.getPassword());
 
         return "redirect:/greeting";
     }

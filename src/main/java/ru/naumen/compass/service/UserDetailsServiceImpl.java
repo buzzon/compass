@@ -9,8 +9,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.naumen.compass.entity.Passenger;
-import ru.naumen.compass.repository.PassengerRepository;
+import ru.naumen.compass.entity.UserAccount;
+import ru.naumen.compass.repository.UserAccountRepository;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,17 +19,17 @@ import java.util.Set;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    private PassengerRepository passengerRepository;
+    private UserAccountRepository userAccountRepository;
 
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) {
-        Passenger passenger = passengerRepository.findByUsername(username);
-        if (passenger == null) throw new UsernameNotFoundException(username);
+        UserAccount userAccount = userAccountRepository.findByUsername(username);
+        if (userAccount == null) throw new UsernameNotFoundException(username);
 
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         grantedAuthorities.add(new SimpleGrantedAuthority("Passenger"));
 
-        return new User(passenger.getUsername(),passenger.getPassword(),grantedAuthorities);
+        return new User(userAccount.getUsername(), userAccount.getPassword(),grantedAuthorities);
     }
 }
