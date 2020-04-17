@@ -1,7 +1,7 @@
 package ru.naumen.compass.entity;
 
 import javax.persistence.*;
-import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Carrier {
@@ -11,6 +11,10 @@ public class Carrier {
 
     @OneToOne(mappedBy = "carrier")
     private User user;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "carrier_id")
+    private Set<Template> templates;
 
     private String title;
     private Integer rating;
@@ -45,21 +49,5 @@ public class Carrier {
 
     public void setRating(Integer rating) {
         this.rating = rating;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Carrier carrier = (Carrier) o;
-        return Objects.equals(id, carrier.id) &&
-                Objects.equals(user, carrier.user) &&
-                Objects.equals(title, carrier.title) &&
-                Objects.equals(rating, carrier.rating);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, user, title, rating);
     }
 }

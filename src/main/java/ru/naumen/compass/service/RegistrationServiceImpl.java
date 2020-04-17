@@ -10,7 +10,6 @@ import ru.naumen.compass.repository.RoleRepository;
 import ru.naumen.compass.repository.UserRepository;
 
 import java.util.Collections;
-import java.util.HashSet;
 
 @Service
 public class RegistrationServiceImpl implements RegistrationService {

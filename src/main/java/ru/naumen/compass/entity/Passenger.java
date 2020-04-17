@@ -1,7 +1,7 @@
 package ru.naumen.compass.entity;
 
 import javax.persistence.*;
-import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Passenger {
@@ -11,6 +11,10 @@ public class Passenger {
 
     @OneToOne(mappedBy = "passenger")
     private User user;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "passenger_id")
+    private Set<Ticket> tickets;
 
     private String l_name;
     private String f_name;
@@ -31,6 +35,14 @@ public class Passenger {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Set<Ticket> getTickets() {
+        return tickets;
+    }
+
+    public void setTickets(Set<Ticket> ticket) {
+        this.tickets = ticket;
     }
 
     public String getL_name() {
@@ -63,23 +75,5 @@ public class Passenger {
 
     public void setRating(Integer rating) {
         this.rating = rating;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Passenger passenger = (Passenger) o;
-        return Objects.equals(id, passenger.id) &&
-                Objects.equals(user, passenger.user) &&
-                Objects.equals(l_name, passenger.l_name) &&
-                Objects.equals(f_name, passenger.f_name) &&
-                Objects.equals(m_name, passenger.m_name) &&
-                Objects.equals(rating, passenger.rating);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, user, l_name, f_name, m_name, rating);
     }
 }

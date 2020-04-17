@@ -7,7 +7,9 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import ru.naumen.compass.entity.Role;
+import ru.naumen.compass.entity.Ticketstatus;
 import ru.naumen.compass.repository.RoleRepository;
+import ru.naumen.compass.repository.TicketstatusRepository;
 
 @SpringBootApplication
 public class CompassApplication extends SpringBootServletInitializer {
@@ -22,10 +24,19 @@ public class CompassApplication extends SpringBootServletInitializer {
 	}
 
 	@Bean
-	public CommandLineRunner createRoles(RoleRepository roleRepository){
+	public CommandLineRunner createBaseRoles(RoleRepository roleRepository){
 		return (args) -> {
 			roleRepository.save(new Role("ADMIN"));
 			roleRepository.save(new Role("USER"));
+		};
+	}
+
+	@Bean
+	public CommandLineRunner createBaseTicketstatus(TicketstatusRepository ticketstatusRepository){
+		return (args) -> {
+			ticketstatusRepository.save(new Ticketstatus("bought"));
+			ticketstatusRepository.save(new Ticketstatus("made"));
+			ticketstatusRepository.save(new Ticketstatus("canceled"));
 		};
 	}
 }
