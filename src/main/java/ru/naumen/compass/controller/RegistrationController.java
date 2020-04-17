@@ -7,10 +7,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import ru.naumen.compass.entity.UserAccount;
+import ru.naumen.compass.entity.Carrier;
+import ru.naumen.compass.entity.Passenger;
+import ru.naumen.compass.entity.User;
 import ru.naumen.compass.service.RegistrationService;
 import ru.naumen.compass.service.SecurityService;
-import ru.naumen.compass.validator.UserAccountValidator;
+import ru.naumen.compass.validator.UserValidator;
 
 @Controller
 public class RegistrationController {
@@ -21,26 +23,50 @@ public class RegistrationController {
     private SecurityService securityService;
 
     @Autowired
-    private UserAccountValidator userAccountValidator;
+    private UserValidator userValidator;
 
-    @GetMapping("/registration")
-    public String showRegistrationForm(Model model){
-        model.addAttribute("UserAccount", new UserAccount());
-        return "registration";
+    @GetMapping("/registration/passenger")
+    public String showRegistrationPassengerForm(Model model){
+        model.addAttribute("User", new User());
+        return "/registration/passenger";
     }
 
-    @PostMapping("/registration")
-    public String registration(@ModelAttribute("UserAccount") UserAccount userAccount, BindingResult bindingResult) {
-        userAccountValidator.validate(userAccount, bindingResult);
+    @GetMapping("/registration/carrier")
+    public String showRegistrationCarrierForm(Model model){
+        model.addAttribute("User", new User());
+        return "/registration/carrier";
+    }
+
+    @PostMapping("/registration/passenger")
+    public String registrationPassenger(@ModelAttribute("User") User user, BindingResult bindingResult) {
+        userValidator.validate(user, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return "registration";
+            return "/registration/passenger";
         }
 
-        registrationService.save(userAccount);
-        securityService.autoLogin(userAccount.getUsername(), userAccount.getPassword());
+        Passenger passenger = new Passenger();
+        passenger.setF_name(user.getUsername());
+        registrationService.save(user, passenger);
+        securityService.autoLogin(user.getUsername(), user.getPassword());
 
-        return "redirect:/greeting";
+        return "greeting";
+    }
+
+    @PostMapping("/registration/carrier")
+    public String registrationCarrier(@ModelAttribute("User") User user, BindingResult bindingResult) {
+        userValidator.validate(user, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            return "/registration/carrier";
+        }
+
+        Carrier carrier = new Carrier();
+        carrier.setTitle(user.getUsername());
+        registrationService.save(user, carrier);
+        securityService.autoLogin(user.getUsername(), user.getPassword());
+
+        return "greeting";
     }
 
     @GetMapping("/login")

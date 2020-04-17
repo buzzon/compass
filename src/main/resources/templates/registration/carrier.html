@@ -1,0 +1,27 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="ru">
+<head>
+    <title>Compass Registration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<h1>Registration</h1>
+<form th:action="@{/registration/carrier}" method="post">
+    <div>
+        <label> Login : <input type="text" th:field="*{User.username}" th:class="${#fields.hasErrors('User.username')} ? fieldError"/></label>
+        <ul th:if="${#fields.hasErrors('User.username')}">
+            <li th:each="err : ${#fields.errors('User.username')}" th:text="${err}"></li>
+        </ul>
+    </div>
+
+    <div>
+        <label> Password: <input type="password" th:field="*{User.password}" th:class="${#fields.hasErrors('User.password')} ? fieldError"/></label>
+        <ul th:if="${#fields.hasErrors('User.password')}">
+            <li th:each="err : ${#fields.errors('User.password')}" th:text="${err}"></li>
+        </ul>
+    </div>
+    <div><input type="submit" value="Register"/></div>
+</form>
+<p>Click <a th:href="@{/}">here</a> to see a main page.</p>
+</body>
+</html>
