@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.naumen.compass.entity.Role;
 import ru.naumen.compass.entity.User;
 import ru.naumen.compass.repository.UserRepository;
 
@@ -27,7 +28,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (user == null) throw new UsernameNotFoundException(username);
 
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority("User"));
+        for (Role role : user.getRoles()){
+            grantedAuthorities.add(new SimpleGrantedAuthority(role.getTitle()));
+        }
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),grantedAuthorities);
     }

@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -28,6 +29,9 @@ public class User {
             inverseJoinColumns =
                     { @JoinColumn(name = "carrier_id", referencedColumnName = "id") })
     private Carrier carrier;
+
+    @ManyToMany
+    private Set<Role> roles;
 
     @NotNull
     @NotEmpty
@@ -78,6 +82,14 @@ public class User {
 
     public void setCarrier(Carrier carrier) {
         this.carrier = carrier;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     @Override
