@@ -1,6 +1,7 @@
 package ru.naumen.compass.entity;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -12,12 +13,22 @@ public class Carrier {
     @OneToOne(mappedBy = "carrier")
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "carrier_id")
-    private Set<Template> templates;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinTable(name = "carrier_pricing",
+            joinColumns = @JoinColumn(name = "carrier_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "pricing_id", referencedColumnName = "id"))
+    private Pricing pricing;
+
+    @OneToMany(mappedBy = "carrier", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Template> templates = new HashSet<>();
 
     private String title;
     private Integer rating;
+
+    public void addChildTemplate(Template template) {
+        template.setCarrier(this);
+        templates.add(template);
+    }
 
     public Long getId() {
         return id;
@@ -33,6 +44,22 @@ public class Carrier {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Pricing getPricing() {
+        return pricing;
+    }
+
+    public void setPricing(Pricing pricing) {
+        this.pricing = pricing;
+    }
+
+    public Set<Template> getTemplates() {
+        return templates;
+    }
+
+    public void setTemplates(Set<Template> templates) {
+        this.templates = templates;
     }
 
     public String getTitle() {

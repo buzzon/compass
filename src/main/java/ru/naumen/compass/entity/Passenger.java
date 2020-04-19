@@ -12,8 +12,7 @@ public class Passenger {
     @OneToOne(mappedBy = "passenger")
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "passenger_id")
+    @OneToMany(mappedBy = "passenger")
     private Set<Ticket> tickets;
 
     private String l_name;

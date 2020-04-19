@@ -11,10 +11,12 @@ public class Ride {
     private Long id;
 
     @ManyToOne
+    @JoinTable(name = "rides_template",
+            joinColumns = @JoinColumn(name = "ride_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "template_id", referencedColumnName = "id"))
     private Template template;
 
-    @OneToMany
-    @JoinColumn(name = "ride_id")
+    @OneToMany(mappedBy = "ride")
     private Set<Ticket> tickets;
 
     @ManyToMany
@@ -25,7 +27,7 @@ public class Ride {
 
     @Temporal(TemporalType.DATE)
     private Date departureDate;
-    private Long views;
+    private Long views = 0L;
     private Boolean isValid;
 
     public Long getId() {

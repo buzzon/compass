@@ -9,6 +9,9 @@ public class Ticket {
     private Long id;
 
     @ManyToOne
+    @JoinTable(name = "tickets_passenger",
+            joinColumns = @JoinColumn(name = "ticket_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "passenger_id", referencedColumnName = "id"))
     private Passenger passenger;
 
     @ManyToOne
@@ -18,11 +21,13 @@ public class Ticket {
     private Ticketstatus ticketstatus;
 
     @ManyToOne
+    @JoinTable(name = "tickets_ride",
+            joinColumns = @JoinColumn(name = "ticket_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "ride_id", referencedColumnName = "id"))
     private Ride ride;
 
     private Integer seat;
     private Integer price;
-    private Boolean isBenefit = false;
     private Boolean isChildren = false;
     private Boolean isLuggage = false;
 
@@ -72,14 +77,6 @@ public class Ticket {
 
     public void setPrice(Integer price) {
         this.price = price;
-    }
-
-    public Boolean getBenefit() {
-        return isBenefit;
-    }
-
-    public void setBenefit(Boolean benefit) {
-        isBenefit = benefit;
     }
 
     public Boolean getChildren() {

@@ -23,10 +23,9 @@ public class RegistrationServiceImpl implements RegistrationService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public void save(User user, Passenger passenger) {
+    public void save(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setRoles(Collections.singleton(roleRepository.findByTitle("USER")));
-        user.setPassenger(passenger);
         userRepository.save(user);
     }
 
@@ -35,6 +34,14 @@ public class RegistrationServiceImpl implements RegistrationService {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setRoles(Collections.singleton(roleRepository.findByTitle("USER")));
         user.setCarrier(carrier);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void save(User user, Passenger passenger) {
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setRoles(Collections.singleton(roleRepository.findByTitle("USER")));
+        user.setPassenger(passenger);
         userRepository.save(user);
     }
 
