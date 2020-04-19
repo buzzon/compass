@@ -27,9 +27,29 @@ public class Ticket {
     private Ride ride;
 
     private Integer seat;
-    private Integer price;
+    private Float price;
     private Boolean isChildren = false;
     private Boolean isLuggage = false;
+
+    public void Config(Ride ride, Passenger passenger, Integer seat, Ticketstatus status) {
+        ride.addTicket(this);
+        passenger.addTicket(this);
+        status.addTickets(this);
+
+        this.seat = seat;
+        calculatePrice();
+    }
+
+    private void calculatePrice(){
+        Pricing pricing = getCarrier().getPricing();
+        float ChildMultiplier = isChildren ? pricing.getChildren_multiplier() : 0;
+        float LuggageMultiplier = isLuggage ? pricing.getLuggage_multiplier() : 0;
+        price = ride.getTemplate().getPrice() * (1 + LuggageMultiplier +ChildMultiplier);
+    }
+
+    public Carrier getCarrier() {
+        return ride.getTemplate().getCarrier();
+    }
 
     public Long getId() {
         return id;
@@ -71,11 +91,11 @@ public class Ticket {
         this.seat = seat;
     }
 
-    public Integer getPrice() {
+    public Float getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(Float price) {
         this.price = price;
     }
 

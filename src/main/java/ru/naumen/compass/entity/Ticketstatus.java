@@ -9,7 +9,7 @@ public class Ticketstatus {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToMany(mappedBy = "ticketstatus", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "ticketstatus", cascade = CascadeType.ALL)
     private Set<Ticket> tickets;
 
     private String title;
@@ -18,6 +18,11 @@ public class Ticketstatus {
 
     public Ticketstatus(String title){
         this.title = title;
+    }
+
+    public void addTickets(Ticket ticket) {
+        ticket.setTicketstatus(this);
+        tickets.add(ticket);
     }
 
     public Long getId() {
@@ -32,8 +37,8 @@ public class Ticketstatus {
         return tickets;
     }
 
-    public void setTickets(Set<Ticket> ticket) {
-        this.tickets = ticket;
+    public void setTickets(Set<Ticket> tickets) {
+        this.tickets = tickets;
     }
 
     public String getTitle() {

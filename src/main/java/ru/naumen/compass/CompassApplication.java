@@ -8,7 +8,9 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Bean;
 import ru.naumen.compass.entity.*;
 import ru.naumen.compass.repository.*;
-import ru.naumen.compass.service.RegistrationService;
+import ru.naumen.compass.service.IRegistrationService;
+
+import java.util.List;
 
 @SpringBootApplication
 public class CompassApplication extends SpringBootServletInitializer {
@@ -40,19 +42,22 @@ public class CompassApplication extends SpringBootServletInitializer {
 	}
 
 	@Bean
-	public CommandLineRunner createTestUser(RegistrationService registrationService){
+	public CommandLineRunner createTestUser(IRegistrationService IRegistrationService){
 		return (args) -> {
 			User user = new User();
 			user.setUsername("q");
 			user.setPassword("q");
-			registrationService.save(user);
+			IRegistrationService.save(user);
 		};
 	}
 
 	@Bean
-	public CommandLineRunner createTestRide(RegistrationService registrationService,
+	public CommandLineRunner createTestRide(IRegistrationService registrationService,
 											TemplateRepository templateRepository,
-											RideRepository rideRepository) {
+											UserRepository userRepository,
+											RideRepository rideRepository,
+											TicketRepository ticketRepository,
+											TicketstatusRepository ticketstatusRepository) {
 		return (args) -> {
 			User user = new User();
 			user.setUsername("w");
@@ -73,6 +78,25 @@ public class CompassApplication extends SpringBootServletInitializer {
 			ride.setValid(true);
 			template.addChildrenRide(ride);
 			rideRepository.save(ride);
+
+			// новый юзер
+			User user2 = new User();
+			user2.setUsername("Ted");
+			user2.setPassword("123");
+			Passenger passenger = new Passenger();
+			passenger.setM_name("m_name");
+			passenger.setF_name("f_name");
+			passenger.setL_name("l_name");
+			passenger.setRating(4.89f);
+			registrationService.save(user2, passenger);
+
+			Ticket ticket = new Ticket();
+			Ticketstatus ticketstatus = ticketstatusRepository.findByTitle("bought");
+			List<Integer> freeSeats = ride.getFreeSeats();
+			Integer seat = freeSeats.get(0);
+			ticket.Config(ride, passenger, seat, ticketstatus);
+
+			ticketRepository.save(ticket);
 		};
 	}
 }

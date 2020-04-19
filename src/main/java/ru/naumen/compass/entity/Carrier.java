@@ -23,7 +23,7 @@ public class Carrier {
     private Set<Template> templates = new HashSet<>();
 
     private String title;
-    private Integer rating;
+    private Float rating;
 
     public void addChildTemplate(Template template) {
         template.setCarrier(this);
@@ -70,11 +70,11 @@ public class Carrier {
         this.title = title;
     }
 
-    public Integer getRating() {
+    public Float getRating() {
         return rating;
     }
 
-    public void setRating(Integer rating) {
+    public void setRating(Float rating) {
         this.rating = rating;
     }
 }

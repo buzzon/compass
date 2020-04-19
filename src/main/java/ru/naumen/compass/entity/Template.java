@@ -20,10 +20,10 @@ public class Template {
     private Carrier carrier;
 
     @ManyToOne
-    @JoinTable(name = "templates_vehicle",
+    @JoinTable(name = "templates_transport",
             joinColumns = @JoinColumn(name = "template_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "vehicle_id", referencedColumnName = "id"))
-    private Vehicle vehicle;
+            inverseJoinColumns = @JoinColumn(name = "transport_id", referencedColumnName = "id"))
+    private Transport transport;
 
     @ManyToOne
     @JoinTable(name = "templates_direction",
@@ -63,12 +63,12 @@ public class Template {
         this.carrier = carrier;
     }
 
-    public Vehicle getVehicle() {
-        return vehicle;
+    public Transport getTransport() {
+        return transport;
     }
 
-    public void setVehicle(Vehicle vehicle) {
-        this.vehicle = vehicle;
+    public void setTransport(Transport transport) {
+        this.transport = transport;
     }
 
     public Direction getDirection() {

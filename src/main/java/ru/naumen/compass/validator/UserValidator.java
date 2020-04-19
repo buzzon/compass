@@ -6,13 +6,13 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 import ru.naumen.compass.entity.User;
-import ru.naumen.compass.service.RegistrationService;
+import ru.naumen.compass.service.IRegistrationService;
 
 @Component
 public class UserValidator implements Validator {
 
     @Autowired
-    private RegistrationService registrationService;
+    private IRegistrationService IRegistrationService;
 
     @Override
     public boolean supports(Class<?> aClass) {
@@ -27,7 +27,7 @@ public class UserValidator implements Validator {
         if (user.getUsername().length() < 4 || user.getUsername().length() > 32) {
             errors.rejectValue("username", "Size.userForm.username");
         }
-        if (registrationService.findByUsername(user.getUsername()) != null) {
+        if (IRegistrationService.findByUsername(user.getUsername()) != null) {
             errors.rejectValue("username", "Duplicate.userForm.username");
         }
 

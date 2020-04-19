@@ -10,17 +10,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import ru.naumen.compass.entity.Carrier;
 import ru.naumen.compass.entity.Passenger;
 import ru.naumen.compass.entity.User;
-import ru.naumen.compass.service.RegistrationService;
-import ru.naumen.compass.service.SecurityService;
+import ru.naumen.compass.service.IRegistrationService;
+import ru.naumen.compass.service.ISecurityService;
 import ru.naumen.compass.validator.UserValidator;
 
 @Controller
 public class RegistrationController {
     @Autowired
-    private RegistrationService registrationService;
+    private IRegistrationService IRegistrationService;
 
     @Autowired
-    private SecurityService securityService;
+    private ISecurityService ISecurityService;
 
     @Autowired
     private UserValidator userValidator;
@@ -47,8 +47,8 @@ public class RegistrationController {
 
         Passenger passenger = new Passenger();
         passenger.setF_name(user.getUsername());
-        registrationService.save(user, passenger);
-        securityService.autoLogin(user.getUsername(), user.getPassword());
+        IRegistrationService.save(user, passenger);
+        ISecurityService.autoLogin(user.getUsername(), user.getPassword());
 
         return "greeting";
     }
@@ -63,8 +63,8 @@ public class RegistrationController {
 
         Carrier carrier = new Carrier();
         carrier.setTitle(user.getUsername());
-        registrationService.save(user, carrier);
-        securityService.autoLogin(user.getUsername(), user.getPassword());
+        IRegistrationService.save(user, carrier);
+        ISecurityService.autoLogin(user.getUsername(), user.getPassword());
 
         return "greeting";
     }

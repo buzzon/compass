@@ -1,28 +1,30 @@
 package ru.naumen.compass;
 
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-import ru.naumen.compass.entity.Carrier;
-import ru.naumen.compass.entity.Passenger;
-import ru.naumen.compass.entity.Template;
-import ru.naumen.compass.entity.User;
+import ru.naumen.compass.entity.*;
+import ru.naumen.compass.repository.RideRepository;
 import ru.naumen.compass.repository.TemplateRepository;
-import ru.naumen.compass.service.RegistrationService;
-import ru.naumen.compass.service.RegistrationServiceImpl;
+import ru.naumen.compass.repository.TicketstatusRepository;
+import ru.naumen.compass.service.IRegistrationService;
+
+import java.util.List;
 
 @SpringBootTest
 class CompassApplicationTests {
 
 	@Autowired
-	RegistrationService registrationService;
+    IRegistrationService registrationService;
 
 	@Autowired
 	TemplateRepository templateRepository;
+
+	@Autowired
+	RideRepository rideRepository;
+
+	@Autowired
+	TicketstatusRepository ticketstatusRepository;
 
 	@Test
 	void AddCarrier_And_CreateRide() {
@@ -37,15 +39,30 @@ class CompassApplicationTests {
 		Template template = new Template();
 		template.setCountTickets(64);
 		template.setPrice(500.00f);
-		carrier.getTemplates().add(template);
-		template.setCarrier(carrier);
+		carrier.addChildTemplate(template);
 		templateRepository.save(template);
 
-		Template template1 = new Template();
-		template1.setCountTickets(32);
-		template1.setPrice(250.00f);
-		template1.setCarrier(carrier);
-		carrier.getTemplates().add(template1);
-		templateRepository.save(template1);
+		// добавить рейс по шаблону
+		Ride ride = new Ride();
+		ride.setValid(true);
+		template.addChildrenRide(ride);
+		rideRepository.save(ride);
+
+		// новый юзер
+		User user2 = new User();
+		user2.setUsername("Ted");
+		user2.setPassword("123");
+		Passenger passenger = new Passenger();
+		passenger.setM_name("m_name");
+		passenger.setF_name("f_name");
+		passenger.setL_name("l_name");
+		passenger.setRating(4.89f);
+		registrationService.save(user2, passenger);
+
+		Ticket ticket = new Ticket();
+		Ticketstatus ticketstatus = ticketstatusRepository.findByTitle("bought");
+		List<Integer> freeSeats = ride.getFreeSeats();
+		Integer seat = freeSeats.get(0);
+		ticket.Config(ride, passenger, seat, ticketstatus);
 	}
 }

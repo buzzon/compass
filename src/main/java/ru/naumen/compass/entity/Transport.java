@@ -5,12 +5,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Vehicle {
+public class Transport {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "transport", cascade = CascadeType.ALL)
     private Set<Template> templates = new HashSet<>();
 
     private String title;

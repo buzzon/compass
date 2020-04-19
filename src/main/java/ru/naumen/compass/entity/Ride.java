@@ -1,8 +1,7 @@
 package ru.naumen.compass.entity;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Ride {
@@ -17,7 +16,7 @@ public class Ride {
     private Template template;
 
     @OneToMany(mappedBy = "ride")
-    private Set<Ticket> tickets;
+    private Set<Ticket> tickets = new HashSet<>();
 
     @ManyToMany
     @JoinTable(name = "rides_discounts",
@@ -29,6 +28,31 @@ public class Ride {
     private Date departureDate;
     private Long views = 0L;
     private Boolean isValid;
+
+    public void addTicket(Ticket ticket) {
+        ticket.setRide(this);
+        tickets.add(ticket);
+    }
+
+    public int getTicketCount() {
+        return tickets.size();
+    }
+
+    public List<Integer> getFreeSeats() {
+
+        Integer seatsCount = getTemplate().getCountTickets();
+        List<Integer> freeSeats = new ArrayList<>(seatsCount);
+        List<Integer> takenSeats = new ArrayList<>(seatsCount);
+
+        for (int i = 0; i < seatsCount; i++)
+            freeSeats.add(i);
+
+        for (Ticket ticket : tickets)
+            takenSeats.add(ticket.getSeat());
+
+        freeSeats.removeAll(takenSeats);
+        return freeSeats;
+    }
 
     public Long getId() {
         return id;
