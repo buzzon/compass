@@ -15,6 +15,13 @@ public class Transport {
 
     private String title;
 
+    public Transport() {
+    }
+
+    public Transport(String title) {
+        this.title = title;
+    }
+
     public Long getId() {
         return id;
     }

@@ -42,6 +42,15 @@ public class CompassApplication extends SpringBootServletInitializer {
 	}
 
 	@Bean
+	public CommandLineRunner createBaseTransport(TransportRepository transportRepository){
+		return (args) -> {
+			transportRepository.save(new Transport("fly"));
+			transportRepository.save(new Transport("bus"));
+			transportRepository.save(new Transport("train"));
+		};
+	}
+
+	@Bean
 	public CommandLineRunner createTestUser(IRegistrationService IRegistrationService){
 		return (args) -> {
 			User user = new User();

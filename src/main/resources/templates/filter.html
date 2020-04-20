@@ -1,10 +1,8 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="ru">
 <head>
     <title>Compass</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" href="../static/styles/style.css" th:href="@{/styles/style.css}"/>
-
 </head>
 <body>
 <h1>Welcome!</h1>
@@ -15,7 +13,7 @@
 </div>
 <div class="filter">
     <h2>filter</h2>
-    <form th:action="@{/filter}" method="post">
+    <form action="" method="post">
         <div class="direction">
             <label> From: <input type="text"></label>
             <label> To: <input type="text"></label>
@@ -27,11 +25,12 @@
         <div class="transport">
             <label> Choice transport:
                 <select>
-                    <option th:each="transport : ${Transports}" th:text="${transport.title}"></option>
+                    <option>bus</option>
+                    <option>fly</option>
+                    <option>train</option>
                 </select>
             </label>
         </div>
-        <div><input type="submit" value="Filter"/></div>
     </form>
 </div>
 </body>
