@@ -5,11 +5,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.project.compass.entity.Carrier;
 import ru.project.compass.entity.Passenger;
+import ru.project.compass.entity.Role;
 import ru.project.compass.entity.User;
 import ru.project.compass.repository.RoleRepository;
 import ru.project.compass.repository.UserRepository;
 
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class RegistrationService implements IRegistrationService {
@@ -32,7 +35,10 @@ public class RegistrationService implements IRegistrationService {
     @Override
     public void save(User user, Carrier carrier) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setRoles(Collections.singleton(roleRepository.findByTitle("USER")));
+        Set<Role> roles = new HashSet<>();
+        roles.add(roleRepository.findByTitle("USER"));
+        roles.add(roleRepository.findByTitle("CARRIER"));
+        user.setRoles(roles);
         user.setCarrier(carrier);
         userRepository.save(user);
     }
@@ -40,7 +46,10 @@ public class RegistrationService implements IRegistrationService {
     @Override
     public void save(User user, Passenger passenger) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setRoles(Collections.singleton(roleRepository.findByTitle("USER")));
+        Set<Role> roles = new HashSet<>();
+        roles.add(roleRepository.findByTitle("USER"));
+        roles.add(roleRepository.findByTitle("PASSENGER"));
+        user.setRoles(roles);
         user.setPassenger(passenger);
         userRepository.save(user);
     }

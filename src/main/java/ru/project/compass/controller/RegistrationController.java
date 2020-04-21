@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 import ru.project.compass.entity.Carrier;
 import ru.project.compass.entity.Passenger;
 import ru.project.compass.entity.User;
@@ -36,7 +37,7 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration/passenger")
-    public String registrationPassenger(@ModelAttribute("User") User user, BindingResult bindingResult) {
+    public String registrationPassenger(@ModelAttribute("User") User user, BindingResult bindingResult){
         userValidator.validate(user, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -48,11 +49,11 @@ public class RegistrationController {
         IRegistrationService.save(user, passenger);
         ISecurityService.autoLogin(user.getUsername(), user.getPassword());
 
-        return "greeting";
+        return "redirect:/";
     }
 
     @PostMapping("/registration/carrier")
-    public String registrationCarrier(@ModelAttribute("User") User user, BindingResult bindingResult) {
+    public String registrationCarrier(@ModelAttribute("User") User user, BindingResult bindingResult, Model model){
         userValidator.validate(user, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -64,17 +65,6 @@ public class RegistrationController {
         IRegistrationService.save(user, carrier);
         ISecurityService.autoLogin(user.getUsername(), user.getPassword());
 
-        return "greeting";
-    }
-
-    @GetMapping("/login")
-    public String login(Model model, String error, String logout) {
-        if (error != null)
-            model.addAttribute("error", "Your login and password is invalid.");
-
-        if (logout != null)
-            model.addAttribute("message", "You have been logged out successfully.");
-
-        return "login";
+        return "redirect:/";
     }
 }

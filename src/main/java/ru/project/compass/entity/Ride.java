@@ -26,16 +26,14 @@ public class Ride {
 
     @Temporal(TemporalType.DATE)
     private Date departureDate;
+    @Temporal(TemporalType.DATE)
+    private Date returnDate;
     private Long views = 0L;
     private Boolean isValid;
 
     public void addTicket(Ticket ticket) {
         ticket.setRide(this);
         tickets.add(ticket);
-    }
-
-    public int getTicketCount() {
-        return tickets.size();
     }
 
     public List<Integer> getFreeSeats() {
@@ -92,6 +90,14 @@ public class Ride {
 
     public void setDepartureDate(Date departureDate) {
         this.departureDate = departureDate;
+    }
+
+    public Date getReturnDate() {
+        return returnDate;
+    }
+
+    public void setReturnDate(Date returnDate) {
+        this.returnDate = returnDate;
     }
 
     public Long getViews() {

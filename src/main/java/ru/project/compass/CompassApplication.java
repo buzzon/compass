@@ -10,18 +10,23 @@ import ru.project.compass.entity.*;
 import ru.project.compass.repository.*;
 import ru.project.compass.service.IRegistrationService;
 
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 @SpringBootApplication
 public class CompassApplication extends SpringBootServletInitializer {
 
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-		return builder.sources(CompassApplication.class);
-	}
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(CompassApplication.class, args);
+	}
+
+		@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+		return builder.sources(CompassApplication.class);
 	}
 
 	@Bean
@@ -29,6 +34,8 @@ public class CompassApplication extends SpringBootServletInitializer {
 		return (args) -> {
 			roleRepository.save(new Role("ADMIN"));
 			roleRepository.save(new Role("USER"));
+			roleRepository.save(new Role("PASSENGER"));
+			roleRepository.save(new Role("CARRIER"));
 		};
 	}
 
@@ -61,59 +68,111 @@ public class CompassApplication extends SpringBootServletInitializer {
 	}
 
 	@Bean
-	public CommandLineRunner createTestRide(IRegistrationService registrationService,
-											TemplateRepository templateRepository,
-											UserRepository userRepository,
-											RideRepository rideRepository,
-											TicketRepository ticketRepository,
-											TicketstatusRepository ticketstatusRepository) {
+	public CommandLineRunner createTestDirectional(StopRepository stopRepository,
+											DirectionRepository directionRepository){
 		return (args) -> {
-			User user = new User();
-			user.setUsername("w");
-			user.setPassword("w");
-			Carrier carrier = new Carrier();
-			carrier.setTitle("OOO TestCarrier");
-			registrationService.save(user, carrier);
+			Stop a = new Stop("A");
+			stopRepository.save(a);
+			Stop b = new Stop("B");
+			stopRepository.save(b);
+			Stop c = new Stop("C");
+			stopRepository.save(c);
+			Stop d = new Stop("A");
+			stopRepository.save(d);
 
-			// создать шаблон рейса
-			Template template = new Template();
-			template.setCountTickets(64);
-			template.setPrice(500.00f);
-			carrier.addChildTemplate(template);
-			templateRepository.save(template);
+			Direction d1 = new Direction();
+			List<Stop> w1 = new LinkedList<>(){{
+				add(a);
+				add(b);
+				add(c);
+			}};
+			d1.setStops(w1);
+			directionRepository.save(d1);
 
-			// добавить рейс по шаблону
-			Ride ride = new Ride();
-			ride.setValid(true);
-			template.addChildrenRide(ride);
-			rideRepository.save(ride);
-
-			// новый юзер
-			User user2 = new User();
-			user2.setUsername("Ted");
-			user2.setPassword("123");
-			Passenger passenger = new Passenger();
-			passenger.setM_name("m_name");
-			passenger.setF_name("f_name");
-			passenger.setL_name("l_name");
-			passenger.setRating(4.89f);
-			registrationService.save(user2, passenger);
-
-			Ticket ticket = new Ticket();
-			Ticketstatus ticketstatus = ticketstatusRepository.findByTitle("bought");
-			List<Integer> freeSeats = ride.getFreeSeats();
-			Integer seat = freeSeats.get(0);
-			ticket.Config(ride, passenger, seat, ticketstatus);
-
-			ticketRepository.save(ticket);
-
-			Ticket ticket2 = new Ticket();
-			List<Integer> freeSeats2 = ride.getFreeSeats();
-			Integer seat2 = freeSeats2.get(0);
-			ticket2.Config(ride, passenger, seat2, ticketstatus);
-
-			ticketRepository.save(ticket2);
+			Direction d2 = new Direction();
+			List<Stop> w2 = new LinkedList<>(){{
+				add(a);
+				add(b);
+				add(c);
+				add(d);
+			}};
+			d2.setStops(w2);
+			directionRepository.save(d2);
 		};
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//	public void createTestRide(IRegistrationService registrationService,
+//											TemplateRepository templateRepository,
+//											UserRepository userRepository,
+//											RideRepository rideRepository,
+//											TicketRepository ticketRepository,
+//											TicketstatusRepository ticketstatusRepository) {
+//			User user = new User();
+//			user.setUsername("TestCarrier");
+//			user.setPassword("TestCarrier");
+//			Carrier carrier = new Carrier();
+//			carrier.setTitle("OOO TestCarrier");
+//			registrationService.save(user, carrier);
+//
+//			// создать шаблон рейса
+//			Template template = new Template();
+//			template.setCountTickets(64);
+//			template.setPrice(500.00f);
+//			carrier.addChildTemplate(template);
+//			templateRepository.save(template);
+//
+//			// добавить рейс по шаблону
+//			Ride ride = new Ride();
+//			ride.setValid(true);
+//			template.addChildrenRide(ride);
+//			rideRepository.save(ride);
+//
+//			Ride ride2 = new Ride();
+//			ride2.setValid(true);
+//			template.addChildrenRide(ride2);
+//			rideRepository.save(ride2);
+//
+//			// новый юзер
+//			User user2 = new User();
+//			user2.setUsername("Ted");
+//			user2.setPassword("123");
+//			Passenger passenger = new Passenger();
+//			passenger.setM_name("m_name");
+//			passenger.setF_name("f_name");
+//			passenger.setL_name("l_name");
+//			passenger.setRating(4.89f);
+//			registrationService.save(user2, passenger);
+//
+//			Ticket ticket = new Ticket();
+//			Ticketstatus ticketstatus = ticketstatusRepository.findByTitle("bought");
+//			List<Integer> freeSeats = ride.getFreeSeats();
+//			Integer seat = freeSeats.get(0);
+//			ticket.Config(ride, passenger, seat, ticketstatus);
+//
+//			ticketRepository.save(ticket);
+//
+//			Ticket ticket2 = new Ticket();
+//			List<Integer> freeSeats2 = ride.getFreeSeats();
+//			Integer seat2 = freeSeats2.get(0);
+//			ticket2.Config(ride, passenger, seat2, ticketstatus);
+//
+//			ticketRepository.save(ticket2);
+//	}
 }
 

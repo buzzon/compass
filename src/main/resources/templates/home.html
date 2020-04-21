@@ -4,18 +4,32 @@
     <title>Compass</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="../static/styles/style.css" th:href="@{/styles/style.css}"/>
-
 </head>
 <body>
-<h1>Welcome!</h1>
-<p>Click <a th:href="@{/greeting}">here</a> to see a greeting.</p>
-<div class="register">
+
+<div th:if="${User} != null" class="tools">
+    <h1 th:text="'Welcome, ' + ${User.getUsername()} + '!'"></h1>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Sign Out"/>
+    </form>
+    <div th:if="${User.isCarrier()}">
+        <p><a th:href="@{/carrier/tools}">Tools</a></p>
+        <p>User.isCarrier()</p>
+    </div>
+    <div th:if="${User.isPassenger()}">
+        <p>User.isPassenger()</p>
+    </div>
+</div>
+
+<div th:if="${User} == null" class="register">
+    <h1>Welcome!</h1>
+    <p>Click <a th:href="@{/login}">here</a> to authorization.</p>
     <p>Click <a th:href="@{/registration/passenger}">here</a> to register as a passenger.</p>
     <p>Click <a th:href="@{/registration/carrier}">here</a> to register as a carrier.</p>
 </div>
 <div class="filter">
     <h2>filter</h2>
-    <form th:action="@{/filter}" method="post">
+    <form th:action="@{/}" method="post">
         <div class="direction">
             <label> From: <input type="text"></label>
             <label> To: <input type="text"></label>
@@ -33,6 +47,12 @@
         </div>
         <div><input type="submit" value="Filter"/></div>
     </form>
+</div>
+<div th:if="${Rides} != null">
+    <div th:each="ride : ${Rides}" class="rides">
+        <div th:text="'Carrier: ' + ${ride.getTemplate().getCarrier().getTitle()}"></div>
+        <div th:text="'Free seats: ' + ${ride.getFreeSeats().size()} + ' / ' + ${ride.getTemplate().getCountTickets()}"></div>
+    </div>
 </div>
 </body>
 </html>

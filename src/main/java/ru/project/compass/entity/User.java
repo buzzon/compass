@@ -1,6 +1,7 @@
 package ru.project.compass.entity;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -27,12 +28,20 @@ public class User {
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     private String username;
     private String password;
 
     public User() {}
+
+    public Boolean isCarrier() {
+        return roles.stream().anyMatch(role -> role.getTitle().equals("CARRIER"));
+    }
+
+    public Boolean isPassenger() {
+        return roles.stream().anyMatch(role -> role.getTitle().equals("PASSENGER"));
+    }
 
     public Long getId() {
         return id;

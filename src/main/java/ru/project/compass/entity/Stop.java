@@ -16,6 +16,13 @@ public class Stop {
     private Float N;
     private Float E;
 
+    public Stop() {
+    }
+
+    public Stop(String title) {
+        this.title = title;
+    }
+
     public Long getId() {
         return id;
     }

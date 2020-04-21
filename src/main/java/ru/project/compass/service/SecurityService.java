@@ -3,10 +3,13 @@ package ru.project.compass.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+import ru.project.compass.entity.User;
+import ru.project.compass.repository.UserRepository;
 
 @Service
 public class SecurityService implements ISecurityService {
@@ -15,14 +18,13 @@ public class SecurityService implements ISecurityService {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @Override
-    public String findLoggedInUsername() {
-        Object userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
-        if (userDetails instanceof UserDetails) {
-            return ((UserDetails)userDetails).getUsername();
-        }
+    @Autowired
+    private UserRepository userRepository;
 
-        return null;
+    @Override
+    public User getLogged() {
+        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+        return userRepository.findByUsername(authentication.getName());
     }
 
     @Override

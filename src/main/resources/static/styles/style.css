@@ -5,17 +5,23 @@
     padding: 10px;
 }
 
-h1 {
-    font-family: sans-serif;
-    font-size: 1.5em;
-    text-transform: uppercase;
+.rides{
+    width:50%;
+    border: 4px double black;
+    background: #ac3;
+    padding: 10px;
 }
 
-strong {
-    font-weight: 700;
-    background-color: yellow;
+.templates{
+    width:50%;
+    border: 4px double black;
+    background: #3ac;
+    padding: 10px;
 }
 
-p {
-    font-family: sans-serif;
+.new_template{
+    width:50%;
+    border: 4px double black;
+    background: #a3c;
+    padding: 10px;
 }
