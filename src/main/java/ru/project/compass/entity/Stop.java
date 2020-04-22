@@ -10,7 +10,7 @@ public class Stop {
     private Long id;
 
     @ManyToMany(mappedBy = "stops", cascade = CascadeType.ALL)
-    private Set<Direction> directions;
+    private Set<Template> templates;
 
     private String title;
     private Float N;
@@ -31,12 +31,12 @@ public class Stop {
         this.id = id;
     }
 
-    public Set<Direction> getDirections() {
-        return directions;
+    public Set<Template> getTemplates() {
+        return templates;
     }
 
-    public void setDirections(Set<Direction> directions) {
-        this.directions = directions;
+    public void setTemplates(Set<Template> templates) {
+        this.templates = templates;
     }
 
     public String getTitle() {

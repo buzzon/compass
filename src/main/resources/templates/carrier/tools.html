@@ -15,13 +15,19 @@
         <form th:action="@{/carrier/tools}" method="post">
             <div><label> count tickets : <input type="number" th:field="*{Template.countTickets}"/></label></div>
             <div><label> price : <input type="number" step="0.01" th:field="*{Template.price}"/></label></div>
-            <div><label> Choice direction:
-                <select th:field="*{Template.direction.id}">
-                    <option th:each="direction : ${Directions}"
-                            th:value="${direction.id}"
-                            th:text="${direction.stopsToString()}"></option>
-                </select>
-            </label></div>
+
+            <h2>Direction:</h2>
+            <div th:each="stop: ${Template.stops}">
+                <div class="stop">
+                    <p th:text="'Id: ' + ${stop.id} + ' | Stop: ' + *{stop.title}"></p>
+                </div>
+<!--                <select th:field="*{stop.id}">-->
+<!--                    <option th:each="gStop : ${Stops}"-->
+<!--                            th:value="${gStop.id}"-->
+<!--                            th:text="${gStop.title}"></option>-->
+<!--                </select>-->
+            </div>
+            <div><input type="submit" value="Add Stop" name="addStop"/></div>
             <div><label> Choice transport:
                 <select th:field="*{Template.transport.id}">
                     <option th:each="transport : ${Transports}"
@@ -29,15 +35,14 @@
                             th:text="${transport.title}"></option>
                 </select>
             </label></div>
-            <div><input type="submit" value="Add"/></div>
+            <div><input type="submit" value="Add Template" name="addTemplate"/></div>
         </form>
     </div>
-
     <div th:each="temp : ${User.getCarrier().getTemplates()}" class="templates">
         <div th:text="'id: ' + ${temp.getId()}"></div>
         <div th:text="'price: ' + ${temp.getPrice()}"></div>
         <div th:text="'seats: ' + ${temp.getCountTickets()}"></div>
-        <div th:text="'direction: ' + ${temp.getDirection().stopsToString()}"></div>
+        <div th:text="'direction: ' + ${temp.getStops()}"></div>-->
         <div th:text="'transport: ' + ${temp.getTransport().getTitle()}"></div>
     </div>
 </div>

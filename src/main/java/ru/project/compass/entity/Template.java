@@ -2,6 +2,8 @@ package ru.project.compass.entity;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -25,11 +27,11 @@ public class Template {
             inverseJoinColumns = @JoinColumn(name = "transport_id", referencedColumnName = "id"))
     private Transport transport;
 
-    @ManyToOne
-    @JoinTable(name = "templates_direction",
+    @ManyToMany
+    @JoinTable(name = "templates_stops",
             joinColumns = @JoinColumn(name = "template_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "direction_id", referencedColumnName = "id"))
-    private Direction direction;
+            inverseJoinColumns = @JoinColumn(name = "stop_id", referencedColumnName = "id"))
+    private List<Stop> stops = new LinkedList<>();
 
     private Integer countTickets;
     private Float price;
@@ -37,6 +39,10 @@ public class Template {
     public void addChildrenRide(Ride ride) {
         ride.setTemplate(this);
         rides.add(ride);
+    }
+
+    public void addStop(Stop stop){
+        stops.add(stop);
     }
 
     public Long getId() {
@@ -71,20 +77,20 @@ public class Template {
         this.transport = transport;
     }
 
-    public Direction getDirection() {
-        return direction;
-    }
-
-    public void setDirection(Direction direction) {
-        this.direction = direction;
-    }
-
     public Integer getCountTickets() {
         return countTickets;
     }
 
     public void setCountTickets(Integer countTickets) {
         this.countTickets = countTickets;
+    }
+
+    public List<Stop> getStops() {
+        return stops;
+    }
+
+    public void setStops(List<Stop> stops) {
+        this.stops = stops;
     }
 
     public Float getPrice() {

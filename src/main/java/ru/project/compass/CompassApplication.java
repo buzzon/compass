@@ -63,13 +63,12 @@ public class CompassApplication extends SpringBootServletInitializer {
 			User user = new User();
 			user.setUsername("q");
 			user.setPassword("q");
-			IRegistrationService.save(user);
+			IRegistrationService.save(user, new Carrier());
 		};
 	}
 
 	@Bean
-	public CommandLineRunner createTestDirectional(StopRepository stopRepository,
-											DirectionRepository directionRepository){
+	public CommandLineRunner createTestStops(StopRepository stopRepository){
 		return (args) -> {
 			Stop a = new Stop("A");
 			stopRepository.save(a);
@@ -79,25 +78,6 @@ public class CompassApplication extends SpringBootServletInitializer {
 			stopRepository.save(c);
 			Stop d = new Stop("A");
 			stopRepository.save(d);
-
-			Direction d1 = new Direction();
-			List<Stop> w1 = new LinkedList<>(){{
-				add(a);
-				add(b);
-				add(c);
-			}};
-			d1.setStops(w1);
-			directionRepository.save(d1);
-
-			Direction d2 = new Direction();
-			List<Stop> w2 = new LinkedList<>(){{
-				add(a);
-				add(b);
-				add(c);
-				add(d);
-			}};
-			d2.setStops(w2);
-			directionRepository.save(d2);
 		};
 	}
 
