@@ -14,10 +14,9 @@
     </form>
     <div th:if="${User.isCarrier()}">
         <p><a th:href="@{/carrier/tools}">Tools</a></p>
-        <p>User.isCarrier()</p>
     </div>
     <div th:if="${User.isPassenger()}">
-        <p>User.isPassenger()</p>
+        <p><a th:href="@{/passenger/tools}">Passenger profile</a></p>
     </div>
 </div>
 

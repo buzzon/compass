@@ -8,9 +8,16 @@
 </head>
 <body>
 <h1>Passenger profile</h1>
+<h2 th:text="${Passenger.l_name} + ' ' + ${Passenger.f_name} + ' ' + ${Passenger.m_name}"></h2>
+<h3 th:text="'Raiting: ' + ${Passenger.rating.toString()}"></h3>
 <p>Click <a th:href="@{/}">here</a> to see a main page.</p>
 <div class="content">
-
+    <form th:action="@{/passenger/tools}" method="post">
+        <div><label> First name : <input type="text" th:field="*{Passenger.f_name}"/></label></div>
+        <div><label> Last name : <input type="text" th:field="*{Passenger.l_name}"/></label></div>
+        <div><label> Middle name : <input type=text th:field="*{Passenger.m_name}"/></label></div>
+        <div><input type="submit" value="edit" name="edit"/></div>
+    </form>
 </div>
 </body>
 </html>

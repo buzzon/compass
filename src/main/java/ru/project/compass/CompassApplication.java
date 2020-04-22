@@ -61,9 +61,24 @@ public class CompassApplication extends SpringBootServletInitializer {
 	public CommandLineRunner createTestUser(IRegistrationService IRegistrationService){
 		return (args) -> {
 			User user = new User();
-			user.setUsername("q");
-			user.setPassword("q");
+			user.setUsername("c");
+			user.setPassword("c");
 			IRegistrationService.save(user, new Carrier());
+		};
+	}
+
+	@Bean
+	public CommandLineRunner createTestPassenger(IRegistrationService IRegistrationService){
+		return (args) -> {
+			User user = new User();
+			user.setUsername("p");
+			user.setPassword("p");
+			Passenger passenger = new Passenger();
+			passenger.setF_name("Виталий");
+			passenger.setL_name("Наливкин");
+			passenger.setM_name("Игоревич");
+			passenger.setRating(4.89f);
+			IRegistrationService.save(user, passenger);
 		};
 	}
 
