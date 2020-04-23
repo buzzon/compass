@@ -39,7 +39,8 @@ public class RegistrationService implements IRegistrationService {
         roles.add(roleRepository.findByTitle("USER"));
         roles.add(roleRepository.findByTitle("CARRIER"));
         user.setRoles(roles);
-        carrier.setRating(4.00f);
+        if (carrier.getRating() == null)
+            carrier.setRating(4.00f);
         user.setCarrier(carrier);
         userRepository.save(user);
     }
@@ -51,7 +52,8 @@ public class RegistrationService implements IRegistrationService {
         roles.add(roleRepository.findByTitle("USER"));
         roles.add(roleRepository.findByTitle("PASSENGER"));
         user.setRoles(roles);
-        passenger.setRating(4.00f);
+        if (passenger.getRating() == null)
+            passenger.setRating(4.00f);
         user.setPassenger(passenger);
         userRepository.save(user);
     }

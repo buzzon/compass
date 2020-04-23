@@ -8,6 +8,7 @@
 </head>
 <body>
 <h1>Tools</h1>
+<h2 th:text="${User.carrier.title} + ' (' + ${User.carrier.rating} + ')'"></h2>
 <p>Click <a th:href="@{/}">here</a> to see a main page.</p>
 <div class="content">
     <h2>Add template</h2>
@@ -16,7 +17,19 @@
             <div><label> count tickets : <input type="number" th:field="*{countTickets}"/></label></div>
             <div><label> price : <input type="number" step="0.01" th:field="*{price}"/></label></div>
 
-            <h2>Direction:</h2>
+            <div><label> Direction:
+<!--                <div th:each=" stop : *{stops}">-->
+<!--                    <div th:object="${stop}">-->
+<!--                        stop-->
+<!--&lt;!&ndash;                        <select th:field="*{id}">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <option th:each="point : ${ALLStops}"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    th:value="${point.id}"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    th:text="${point.title}">&ndash;&gt;-->
+<!--&lt;!&ndash;                            </option>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </select>&ndash;&gt;-->
+<!--                    </div>-->
+<!--                </div>-->
+            </label></div>
             <div><input type="submit" value="Add Stop" name="addStop"/></div>
             <div><label> Choice transport:
                 <select th:field="*{transport.id}">
@@ -32,28 +45,61 @@
     <div th:if="${User.getCarrier().templates} != null">
         <h2>Templates:</h2>
         <div th:each="template : ${User.getCarrier().templates}" class="rides">
-            <div th:text="'id: ' + ${template.id}"></div>
-            <div>stops:</div>
-            <div th:each="stop : ${template.stops}">
-                <div th:text="'--> ' + ${stop.title}"></div>
-            </div>
-            <div th:switch="${template.transport}">
-                <div th:case="*" th:text="'transport: ' + *{template.transport.title}"></div>
-                <div th:case="null" th:text="'transport: Transport is not specified'"></div>
-            </div>
-            <div th:text="'seats: ' + *{template.countTickets}"></div>
-            <div th:text="'price: ' + *{template.price}"></div>
-            <div th:if="${template.getRides() != null}">
-                <h3>Rides:</h3>
-                <div th:each="ride : ${template.getRides()}" class="ride">
-                    <div th:text="'id: ' + ${ride.id}"></div>
-                    <div th:text="'isValid: ' + ${ride.valid}"></div>
-                    <div th:text="'discounts: ' + ${ride.discounts}"></div>
-                    <div th:text="'departureDate: ' + ${ride.departureDate}"></div>
-                    <div th:text="'returnDate: ' + ${ride.returnDate}"></div>
-                    <div th:text="'views: ' + ${ride.views}"></div>
-                    <div th:text="'free seats count: ' + ${ride.freeSeats.size()} + '/' + ${template.countTickets}"></div>
-                    <div th:text="'free seats: ' + ${ride.freeSeats}"></div>
+            <div th:object="${template}">
+                <div th:text="'id: ' + *{id}"></div>
+                <div>stops:</div>
+                <div th:each="stop : *{stops}">
+                    <div th:object="${stop}">
+                        <div th:text="'--> ' + *{title}"></div>
+                    </div>
+                </div>
+                <div th:switch="*{transport}">
+                    <div th:case="*" th:text="'transport: ' + *{transport.title}"></div>
+                    <div th:case="null" th:text="'transport: Transport is not specified'"></div>
+                </div>
+                <div th:text="'seats: ' + *{countTickets}"></div>
+                <div th:text="'price: ' + *{price}"></div>
+
+                <div th:if="*{rides.size() == 0}">
+                    <form th:action="@{/carrier/tools}" method="post">
+                        <label>
+                            <input hidden name="templateId" type="number" th:value="*{id}">
+                        </label>
+                        <input type="submit" value="Delete Template" name="deleteTemplate"/>
+                    </form>
+                </div>
+
+                <h3>Add Ride</h3>
+                <form th:action="@{/carrier/tools}" method="post">
+                    <label>
+                        <input hidden name="templateId" type="number" th:value="*{id}">
+                    </label>
+                    <input type="submit" value="Add Ride" name="addRide"/>
+                </form>
+
+                <div th:if="*{getRides() != null}">
+                    <h3>Rides:</h3>
+                    <div th:each="ride : ${template.getRides()}" class="ride">
+                        <div th:object="${ride}">
+                            <div th:text="'id: ' + *{id}"></div>
+                            <div th:text="'isValid: ' + *{valid}"></div>
+                            <div th:text="'discounts: ' + *{discounts}"></div>
+                            <div th:text="'departureDate: ' + *{departureDate}"></div>
+                            <div th:text="'returnDate: ' + *{returnDate}"></div>
+                            <div th:text="'views: ' + *{views}"></div>
+                            <div th:text="'free seats count: ' + *{freeSeats.size()} + '/' + ${template.countTickets}"></div>
+                            <div th:text="'free seats: ' + *{freeSeats}"></div>
+
+                            <div th:if="${template.countTickets} == *{freeSeats.size()}">
+                                <form th:action="@{/carrier/tools}" method="post">
+                                    <label>
+                                        <input hidden name="rideId" type="number" th:value="*{id}">
+                                    </label>
+                                    <input type="submit" value="Delete Ride" name="deleteRide"/>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

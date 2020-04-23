@@ -30,7 +30,6 @@
     </div>
 </div>
 
-
 <div class="filter">
     <h2>filter</h2>
     <form th:action="@{/}" method="post">
@@ -60,10 +59,15 @@
             <div th:text="'--> ' + ${stop.title}"></div>
         </div>
         <div th:text="'Free seats: ' + ${ride.getFreeSeats().size()} + ' / ' + ${ride.getTemplate().getCountTickets()}"></div>
-        <form th:action="@{/orderTicket}" method="post" th:object="${ride}">
-            <input hidden name="rideId" type="number" th:value="*{id}">
-            <input type="submit" value="buy"/>
-        </form>
+
+        <div th:if="${User} != null">
+            <form th:action="@{/orderTicket}" method="post" th:object="${ride}">
+                <label>
+                    <input hidden name="rideId" type="number" th:value="*{id}">
+                </label>
+                <input type="submit" value="buy"/>
+            </form>
+        </div>
     </div>
 </div>
 </body>

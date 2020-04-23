@@ -13,8 +13,8 @@ public class Stop {
     private Set<Template> templates;
 
     private String title;
-    private Float N;
-    private Float E;
+    private Double N;
+    private Double E;
 
     public Stop() {
     }
@@ -47,19 +47,19 @@ public class Stop {
         this.title = title;
     }
 
-    public Float getN() {
+    public Double getN() {
         return N;
     }
 
-    public void setN(Float n) {
+    public void setN(Double n) {
         N = n;
     }
 
-    public Float getE() {
+    public Double getE() {
         return E;
     }
 
-    public void setE(Float e) {
+    public void setE(Double e) {
         E = e;
     }
 }

@@ -6,10 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import ru.project.compass.entity.Stop;
-import ru.project.compass.entity.Template;
-import ru.project.compass.entity.Transport;
-import ru.project.compass.entity.User;
+import org.springframework.web.bind.annotation.RequestParam;
+import ru.project.compass.entity.*;
+import ru.project.compass.repository.RideRepository;
 import ru.project.compass.repository.StopRepository;
 import ru.project.compass.repository.TemplateRepository;
 import ru.project.compass.repository.TransportRepository;
@@ -31,6 +30,9 @@ public class CarrierController {
     private TransportRepository transportRepository;
 
     @Autowired
+    private RideRepository rideRepository;
+
+    @Autowired
     private StopRepository stopRepository;
 
     @ModelAttribute("Transports")
@@ -38,7 +40,7 @@ public class CarrierController {
         return transportRepository.findAll();
     }
 
-    @ModelAttribute("Stops")
+    @ModelAttribute("ALLStops")
     public List<Stop> stops() {
         return stopRepository.findAll();
     }
@@ -53,11 +55,59 @@ public class CarrierController {
         return "/carrier/tools";
     }
 
+    @PostMapping(value = "/carrier/tools", params = "deleteTemplate")
+    public String DeleteTemplate(@RequestParam(name = "templateId") Long id, Model model) {
+        model.addAttribute("User", securityService.getLogged());
+        Template template =  new Template();
+        template.addStop(stops().get(0));
+        template.addStop(stops().get(0));
+        model.addAttribute("Template", template);
+
+        templateRepository.deleteById(id);
+
+        return "/carrier/tools";
+    }
+
+    @PostMapping(value = "/carrier/tools", params = "deleteRide")
+    public String DeleteRide(@RequestParam(name = "rideId") Long id, Model model) {
+        model.addAttribute("User", securityService.getLogged());
+        Template template =  new Template();
+        template.addStop(stops().get(0));
+        template.addStop(stops().get(0));
+        model.addAttribute("Template", template);
+
+        rideRepository.deleteById(id);
+
+        return "/carrier/tools";
+    }
+
+    @PostMapping(value = "/carrier/tools", params = "addRide")
+    public String addRide(@RequestParam(name = "templateId") Long id, Model model) {
+        model.addAttribute("User", securityService.getLogged());
+        Template template =  new Template();
+        template.addStop(stops().get(0));
+        template.addStop(stops().get(0));
+        model.addAttribute("Template", template);
+
+        if (templateRepository.findById(id).isPresent()){
+            Template template1 = templateRepository.findById(id).get();
+
+            // добавить рейс по шаблону
+		    Ride ride = new Ride();
+			ride.setValid(true);
+            template1.addChildrenRide(ride);
+			rideRepository.save(ride);
+        }
+
+        return "/carrier/tools";
+    }
+
     @PostMapping(value = "/carrier/tools", params = "addTemplate")
     public String AddTemplate(@ModelAttribute("Template") Template template, Model model) {
         User user = securityService.getLogged();
         user.getCarrier().addChildTemplate(template);
-        template.setTransport(transportRepository.findById(template.getTransport().getId()).get());
+        if (transportRepository.findById(template.getTransport().getId()).isPresent())
+            template.setTransport(transportRepository.findById(template.getTransport().getId()).get());
         templateRepository.save(template);
 
         model.addAttribute("User", user);
