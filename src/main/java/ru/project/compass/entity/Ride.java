@@ -42,7 +42,7 @@ public class Ride {
         List<Integer> freeSeats = new ArrayList<>(seatsCount);
         List<Integer> takenSeats = new ArrayList<>(seatsCount);
 
-        for (int i = 0; i < seatsCount; i++)
+        for (int i = 1; i <= seatsCount; i++)
             freeSeats.add(i);
 
         for (Ticket ticket : tickets)

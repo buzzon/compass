@@ -12,6 +12,12 @@
     padding: 10px;
 }
 
+.ride{
+    border: 4px double black;
+    background: #fc3;
+    padding: 10px;
+}
+
 .templates{
     width:50%;
     border: 4px double black;

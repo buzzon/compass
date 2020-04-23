@@ -7,25 +7,30 @@
 </head>
 <body>
 
-<div th:if="${User} != null" class="tools">
-    <h1 th:text="'Welcome, ' + ${User.getUsername()} + '!'"></h1>
-    <form th:action="@{/logout}" method="post">
-        <input type="submit" value="Sign Out"/>
-    </form>
-    <div th:if="${User.isCarrier()}">
-        <p><a th:href="@{/carrier/tools}">Tools</a></p>
-    </div>
-    <div th:if="${User.isPassenger()}">
-        <p><a th:href="@{/passenger/tools}">Passenger profile</a></p>
-    </div>
-</div>
-
 <div th:if="${User} == null" class="register">
     <h1>Welcome!</h1>
     <p>Click <a th:href="@{/login}">here</a> to authorization.</p>
     <p>Click <a th:href="@{/registration/passenger}">here</a> to register as a passenger.</p>
     <p>Click <a th:href="@{/registration/carrier}">here</a> to register as a carrier.</p>
 </div>
+
+<div th:if="${User} != null" class="tools">
+    <h1 th:text="'Welcome, ' + ${User.getUsername()} + '!'"></h1>
+
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Sign Out"/>
+    </form>
+
+    <div th:if="${User.isCarrier()}">
+        <p><a th:href="@{/carrier/tools}">Tools</a></p>
+    </div>
+
+    <div th:if="${User.isPassenger()}">
+        <p><a th:href="@{/passenger/tools}">Passenger profile</a></p>
+    </div>
+</div>
+
+
 <div class="filter">
     <h2>filter</h2>
     <form th:action="@{/}" method="post">
@@ -50,7 +55,15 @@
 <div th:if="${Rides} != null">
     <div th:each="ride : ${Rides}" class="rides">
         <div th:text="'Carrier: ' + ${ride.getTemplate().getCarrier().getTitle()}"></div>
+        stops:
+        <div th:each="stop : ${ride.template.stops}">
+            <div th:text="'--> ' + ${stop.title}"></div>
+        </div>
         <div th:text="'Free seats: ' + ${ride.getFreeSeats().size()} + ' / ' + ${ride.getTemplate().getCountTickets()}"></div>
+        <form th:action="@{/orderTicket}" method="post" th:object="${ride}">
+            <input hidden name="rideId" type="number" th:value="*{id}">
+            <input type="submit" value="buy"/>
+        </form>
     </div>
 </div>
 </body>

@@ -10,26 +10,16 @@
 <h1>Tools</h1>
 <p>Click <a th:href="@{/}">here</a> to see a main page.</p>
 <div class="content">
-    <h2>Templates</h2>
+    <h2>Add template</h2>
     <div class="new_template">
-        <form th:action="@{/carrier/tools}" method="post">
-            <div><label> count tickets : <input type="number" th:field="*{Template.countTickets}"/></label></div>
-            <div><label> price : <input type="number" step="0.01" th:field="*{Template.price}"/></label></div>
+        <form th:action="@{/carrier/tools}" method="post" th:object="${Template}">
+            <div><label> count tickets : <input type="number" th:field="*{countTickets}"/></label></div>
+            <div><label> price : <input type="number" step="0.01" th:field="*{price}"/></label></div>
 
             <h2>Direction:</h2>
-            <div th:each="stop: ${Template.stops}">
-                <div class="stop">
-                    <p th:text="'Id: ' + ${stop.id} + ' | Stop: ' + *{stop.title}"></p>
-                </div>
-<!--                <select th:field="*{stop.id}">-->
-<!--                    <option th:each="gStop : ${Stops}"-->
-<!--                            th:value="${gStop.id}"-->
-<!--                            th:text="${gStop.title}"></option>-->
-<!--                </select>-->
-            </div>
             <div><input type="submit" value="Add Stop" name="addStop"/></div>
             <div><label> Choice transport:
-                <select th:field="*{Template.transport.id}">
+                <select th:field="*{transport.id}">
                     <option th:each="transport : ${Transports}"
                             th:value="${transport.id}"
                             th:text="${transport.title}"></option>
@@ -38,12 +28,35 @@
             <div><input type="submit" value="Add Template" name="addTemplate"/></div>
         </form>
     </div>
-    <div th:each="temp : ${User.getCarrier().getTemplates()}" class="templates">
-        <div th:text="'id: ' + ${temp.getId()}"></div>
-        <div th:text="'price: ' + ${temp.getPrice()}"></div>
-        <div th:text="'seats: ' + ${temp.getCountTickets()}"></div>
-        <div th:text="'direction: ' + ${temp.getStops()}"></div>-->
-        <div th:text="'transport: ' + ${temp.getTransport().getTitle()}"></div>
+
+    <div th:if="${User.getCarrier().templates} != null">
+        <h2>Templates:</h2>
+        <div th:each="template : ${User.getCarrier().templates}" class="rides">
+            <div th:text="'id: ' + ${template.id}"></div>
+            <div>stops:</div>
+            <div th:each="stop : ${template.stops}">
+                <div th:text="'--> ' + ${stop.title}"></div>
+            </div>
+            <div th:switch="${template.transport}">
+                <div th:case="*" th:text="'transport: ' + *{template.transport.title}"></div>
+                <div th:case="null" th:text="'transport: Transport is not specified'"></div>
+            </div>
+            <div th:text="'seats: ' + *{template.countTickets}"></div>
+            <div th:text="'price: ' + *{template.price}"></div>
+            <div th:if="${template.getRides() != null}">
+                <h3>Rides:</h3>
+                <div th:each="ride : ${template.getRides()}" class="ride">
+                    <div th:text="'id: ' + ${ride.id}"></div>
+                    <div th:text="'isValid: ' + ${ride.valid}"></div>
+                    <div th:text="'discounts: ' + ${ride.discounts}"></div>
+                    <div th:text="'departureDate: ' + ${ride.departureDate}"></div>
+                    <div th:text="'returnDate: ' + ${ride.returnDate}"></div>
+                    <div th:text="'views: ' + ${ride.views}"></div>
+                    <div th:text="'free seats count: ' + ${ride.freeSeats.size()} + '/' + ${template.countTickets}"></div>
+                    <div th:text="'free seats: ' + ${ride.freeSeats}"></div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </body>

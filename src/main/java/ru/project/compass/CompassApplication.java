@@ -10,10 +10,7 @@ import ru.project.compass.entity.*;
 import ru.project.compass.repository.*;
 import ru.project.compass.service.IRegistrationService;
 
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 @SpringBootApplication
 public class CompassApplication extends SpringBootServletInitializer {
@@ -58,17 +55,17 @@ public class CompassApplication extends SpringBootServletInitializer {
 	}
 
 	@Bean
-	public CommandLineRunner createTestUser(IRegistrationService IRegistrationService){
+	public CommandLineRunner createTestUser(IRegistrationService registrationService){
 		return (args) -> {
 			User user = new User();
 			user.setUsername("c");
 			user.setPassword("c");
-			IRegistrationService.save(user, new Carrier());
+			registrationService.save(user, new Carrier());
 		};
 	}
 
 	@Bean
-	public CommandLineRunner createTestPassenger(IRegistrationService IRegistrationService){
+	public CommandLineRunner createTestPassenger(IRegistrationService registrationService){
 		return (args) -> {
 			User user = new User();
 			user.setUsername("p");
@@ -78,96 +75,94 @@ public class CompassApplication extends SpringBootServletInitializer {
 			passenger.setL_name("Наливкин");
 			passenger.setM_name("Игоревич");
 			passenger.setRating(4.89f);
-			IRegistrationService.save(user, passenger);
+			registrationService.save(user, passenger);
 		};
 	}
 
 	@Bean
 	public CommandLineRunner createTestStops(StopRepository stopRepository){
 		return (args) -> {
-			Stop a = new Stop("A");
+			Stop a = new Stop("Черепаново");
 			stopRepository.save(a);
-			Stop b = new Stop("B");
+			Stop b = new Stop("Кировск");
 			stopRepository.save(b);
-			Stop c = new Stop("C");
+			Stop c = new Stop("Алексеевка");
 			stopRepository.save(c);
-			Stop d = new Stop("A");
+			Stop d = new Stop("Кувшиново");
 			stopRepository.save(d);
 		};
 	}
 
+	@Bean
+	public CommandLineRunner createTestRide(IRegistrationService registrationService,
+											TicketstatusRepository ticketstatusRepository,
+											TemplateRepository templateRepository,
+											RideRepository rideRepository,
+											TicketRepository ticketRepository,
+											StopRepository stopRepository,
+											TransportRepository transportRepository){
+		return (args) -> {
+			// Carrier
+			User userCarrier = new User();
+			userCarrier.setUsername("cc");
+			userCarrier.setPassword("cc");
+			Carrier carrier = new Carrier();
+			carrier.setTitle("OOO TestCarrier");
+			registrationService.save(userCarrier, carrier);
 
+			// создать шаблон рейса
+			Template template = new Template();
+			template.setCountTickets(64);
+			template.setPrice(500.00f);
+			template.setTransport(transportRepository.findAll().get(1));
+			template.setStops(stopRepository.findAll());
+			carrier.addChildTemplate(template);
+			templateRepository.save(template);
 
+			// добавить рейс по шаблону
+			Ride ride = new Ride();
+			ride.setValid(true);
+			template.addChildrenRide(ride);
+			rideRepository.save(ride);
 
+			Ride ride2 = new Ride();
+			ride2.setValid(true);
+			template.addChildrenRide(ride2);
+			rideRepository.save(ride2);
 
+			// создать шаблон рейса
+			Template template2 = new Template();
+			template2.setCountTickets(12);
+			template2.setPrice(8530.00f);
+			template2.setTransport(transportRepository.findAll().get(0));
+			template2.setStops(stopRepository.findAll());
+			carrier.addChildTemplate(template2);
+			templateRepository.save(template2);
 
+			// добавить рейс по шаблону
+			Ride ride3 = new Ride();
+			ride3.setValid(true);
+			template2.addChildrenRide(ride3);
+			rideRepository.save(ride3);
 
+			// Passenger
+			User userPassenger = new User();
+			userPassenger.setUsername("pp");
+			userPassenger.setPassword("pp");
+			Passenger passenger = new Passenger();
+			passenger.setF_name("Рябова");
+			passenger.setL_name("Вероника");
+			passenger.setM_name("Наумовна");
+			passenger.setRating(4.71f);
+			registrationService.save(userPassenger, passenger);
 
+			Ticket ticket = new Ticket();
+			Ticketstatus ticketstatus = ticketstatusRepository.findByTitle("bought");
+			List<Integer> freeSeats = ride.getFreeSeats();
+			Integer seat = freeSeats.get(0);
+			ticket.Config(ride, passenger, seat, ticketstatus);
 
-
-
-
-
-
-
-
-
-//	public void createTestRide(IRegistrationService registrationService,
-//											TemplateRepository templateRepository,
-//											UserRepository userRepository,
-//											RideRepository rideRepository,
-//											TicketRepository ticketRepository,
-//											TicketstatusRepository ticketstatusRepository) {
-//			User user = new User();
-//			user.setUsername("TestCarrier");
-//			user.setPassword("TestCarrier");
-//			Carrier carrier = new Carrier();
-//			carrier.setTitle("OOO TestCarrier");
-//			registrationService.save(user, carrier);
-//
-//			// создать шаблон рейса
-//			Template template = new Template();
-//			template.setCountTickets(64);
-//			template.setPrice(500.00f);
-//			carrier.addChildTemplate(template);
-//			templateRepository.save(template);
-//
-//			// добавить рейс по шаблону
-//			Ride ride = new Ride();
-//			ride.setValid(true);
-//			template.addChildrenRide(ride);
-//			rideRepository.save(ride);
-//
-//			Ride ride2 = new Ride();
-//			ride2.setValid(true);
-//			template.addChildrenRide(ride2);
-//			rideRepository.save(ride2);
-//
-//			// новый юзер
-//			User user2 = new User();
-//			user2.setUsername("Ted");
-//			user2.setPassword("123");
-//			Passenger passenger = new Passenger();
-//			passenger.setM_name("m_name");
-//			passenger.setF_name("f_name");
-//			passenger.setL_name("l_name");
-//			passenger.setRating(4.89f);
-//			registrationService.save(user2, passenger);
-//
-//			Ticket ticket = new Ticket();
-//			Ticketstatus ticketstatus = ticketstatusRepository.findByTitle("bought");
-//			List<Integer> freeSeats = ride.getFreeSeats();
-//			Integer seat = freeSeats.get(0);
-//			ticket.Config(ride, passenger, seat, ticketstatus);
-//
-//			ticketRepository.save(ticket);
-//
-//			Ticket ticket2 = new Ticket();
-//			List<Integer> freeSeats2 = ride.getFreeSeats();
-//			Integer seat2 = freeSeats2.get(0);
-//			ticket2.Config(ride, passenger, seat2, ticketstatus);
-//
-//			ticketRepository.save(ticket2);
-//	}
+			ticketRepository.save(ticket);
+		};
+	}
 }
-
