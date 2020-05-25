@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.project.compass.entity.Stop;
 import ru.project.compass.entity.User;
 import ru.project.compass.repository.RideRepository;
@@ -41,7 +42,7 @@ public class HomeController {
     }
 
     @PostMapping(value = {"home",""})
-    public String showHomePageAndRides(Model model){
+    public String showHomePageAndRides(Model model, @RequestParam(name = "transport") String transport){
         model.addAttribute("From", new Stop());
         model.addAttribute("To", new Stop());
         model.addAttribute("DepartureDate", new Date());

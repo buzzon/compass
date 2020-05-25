@@ -17,19 +17,19 @@
             <div><label> count tickets : <input type="number" th:field="*{countTickets}"/></label></div>
             <div><label> price : <input type="number" step="0.01" th:field="*{price}"/></label></div>
 
-            <div><label> Direction:
+<!--            <div><label> Direction:-->
 <!--                <div th:each=" stop : *{stops}">-->
 <!--                    <div th:object="${stop}">-->
 <!--                        stop-->
-<!--&lt;!&ndash;                        <select th:field="*{id}">&ndash;&gt;-->
-<!--&lt;!&ndash;                            <option th:each="point : ${ALLStops}"&ndash;&gt;-->
-<!--&lt;!&ndash;                                    th:value="${point.id}"&ndash;&gt;-->
-<!--&lt;!&ndash;                                    th:text="${point.title}">&ndash;&gt;-->
-<!--&lt;!&ndash;                            </option>&ndash;&gt;-->
-<!--&lt;!&ndash;                        </select>&ndash;&gt;-->
+<!--                        <select th:field="*{id}">-->
+<!--                            <option th:each="point : ${ALLStops}"-->
+<!--                                    th:value="${point.id}"-->
+<!--                                    th:text="${point.title}">-->
+<!--                            </option>-->
+<!--                        </select>-->
 <!--                    </div>-->
 <!--                </div>-->
-            </label></div>
+<!--            </label></div>-->
             <div><input type="submit" value="Add Stop" name="addStop"/></div>
             <div><label> Choice transport:
                 <select th:field="*{transport.id}">

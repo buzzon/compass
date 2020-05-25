@@ -6,4 +6,5 @@ import ru.project.compass.entity.Transport;
 import java.util.Optional;
 
 public interface TransportRepository extends JpaRepository<Transport, Long> {
+
 }

@@ -14,7 +14,6 @@ import ru.project.compass.repository.TemplateRepository;
 import ru.project.compass.repository.TransportRepository;
 import ru.project.compass.service.SecurityService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
