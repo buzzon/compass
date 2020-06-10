@@ -98,6 +98,9 @@ public class CarrierController {
 
         rideRepository.deleteById(id);
 
+
+
+
         return "/carrier/tools";
     }
 
