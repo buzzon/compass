@@ -1,17 +1,19 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ru">
+
 <head>
     <title>Compass</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="../static/styles/style.css" th:href="@{/styles/style.css}"/>
 </head>
-<body>
 
+<body>
 <div th:if="${User} == null" class="register">
     <h1>Welcome!</h1>
     <p>Click <a th:href="@{/login}">here</a> to authorization.</p>
     <p>Click <a th:href="@{/registration/passenger}">here</a> to register as a passenger.</p>
     <p>Click <a th:href="@{/registration/carrier}">here</a> to register as a carrier.</p>
+    <p>Click <a th:href="@{/planes_map}">here</a> to see map.</p>
 </div>
 
 <div th:if="${User} != null" class="tools">
@@ -23,10 +25,12 @@
 
     <div th:if="${User.isCarrier()}">
         <p><a th:href="@{/carrier/tools}">Tools</a></p>
+        <p>Click <a th:href="@{/planes_map}">here</a> to see map.</p>
     </div>
 
     <div th:if="${User.isPassenger()}">
         <p><a th:href="@{/passenger/tools}">Passenger profile</a></p>
+        <p>Click <a th:href="@{/planes_map}">here</a> to see map.</p>
     </div>
 </div>
 
@@ -34,12 +38,26 @@
     <h2>filter</h2>
     <form th:action="@{/}" method="post">
         <div class="direction">
-            <label> From: <input type="text"></label>
-            <label> To: <input type="text"></label>
+            <label> From:
+                <select>
+                    <option th:each="point : ${ALLStops}"
+                            th:value="${point.id}"
+                            th:text="${point.title}">
+                    </option>
+                </select>
+            </label>
+            <label> To:
+                <select>
+                    <option th:each="point : ${ALLStops}"
+                            th:value="${point.id}"
+                            th:text="${point.title}">
+                    </option>
+                </select>
+            </label>
         </div>
         <div class="date">
-            <label> Departure date: <input type="text"></label>
-            <label> Return date: <input type="text"></label>
+            <label> Departure date: <input type="datetime-local"></label>
+            <label> Return date: <input type="datetime-local"></label>
         </div>
         <div class="transport">
             <label> Choice transport:
@@ -59,6 +77,8 @@
             <div th:text="'--> ' + ${stop.title}"></div>
         </div>
         <div th:text="'Free seats: ' + ${ride.getFreeSeats().size()} + ' / ' + ${ride.getTemplate().getCountTickets()}"></div>
+        <div th:text="'departureDate: ' + ${ride.getDepartureDateStr()}"></div>
+        <div th:text="'returnDate: ' + ${ride.getReturnDateStr()}"></div>
         <div th:text="'Transport: ' + ${ride.getTemplate().getTransport().title}"></div>
         <div th:text="'Price: ' + ${ride.getTemplate().price}"></div>
 
@@ -72,5 +92,12 @@
         </div>
     </div>
 </div>
+
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="https://d3js.org/queue.v1.min.js"></script>
+<script src="https://d3js.org/topojson.v0.min.js"></script>
+
+<script src="../static/js/planes_map.js"></script>
+
 </body>
 </html>

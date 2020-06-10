@@ -13,7 +13,7 @@ public class Template {
     private Long id;
 
     @OneToMany(mappedBy = "template")
-    private Set<Ride> rides = new HashSet<>();
+    private List<Ride> rides = new LinkedList<>();
 
     @ManyToOne
     @JoinTable(name = "templates_carrier",
@@ -53,11 +53,11 @@ public class Template {
         this.id = id;
     }
 
-    public Set<Ride> getRides() {
+    public List<Ride> getRides() {
         return rides;
     }
 
-    public void setRides(Set<Ride> rides) {
+    public void setRides(List<Ride> rides) {
         this.rides = rides;
     }
 

@@ -1,6 +1,8 @@
 package ru.project.compass.entity;
 
 import javax.persistence.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Entity
@@ -24,9 +26,9 @@ public class Ride {
             inverseJoinColumns = @JoinColumn(name = "discounts_id", referencedColumnName = "id"))
     private Set<Discount> discounts;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date departureDate;
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date returnDate;
     private Long views = 0L;
     private Boolean isValid;
@@ -88,12 +90,26 @@ public class Ride {
         return departureDate;
     }
 
+    public String getDepartureDateStr() {
+        String date = "null";
+        if (departureDate != null)
+            date = String.format("%tc", departureDate );
+        return date;
+    }
+
     public void setDepartureDate(Date departureDate) {
         this.departureDate = departureDate;
     }
 
     public Date getReturnDate() {
         return returnDate;
+    }
+
+    public String getReturnDateStr() {
+        String date = "null";
+        if (returnDate != null)
+            date = String.format("%tc", returnDate );
+        return date;
     }
 
     public void setReturnDate(Date returnDate) {

@@ -26,7 +26,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/", "/home","/registration/passenger","/registration/carrier").permitAll()
+                    .antMatchers("/", "/home","/registration/passenger","/registration/carrier","planes_map").permitAll()
                     .antMatchers("/carrier/tools").hasAuthority("CARRIER")
                     .antMatchers("/passenger/tools").hasAuthority("PASSENGER")
                 .and()
@@ -41,6 +41,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) {
         web.ignoring()
-                .antMatchers("/styles/**", "/js/**");
+                .antMatchers("/styles/**", "/js/**", "/json/**");
     }
 }

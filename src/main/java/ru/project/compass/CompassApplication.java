@@ -28,7 +28,7 @@ public class CompassApplication extends SpringBootServletInitializer {
 		return builder.sources(CompassApplication.class);
 	}
 
-//
+
 //	@Bean
 //	public CommandLineRunner createBaseRoles(RoleRepository roleRepository){
 //		return (args) -> {
@@ -54,31 +54,6 @@ public class CompassApplication extends SpringBootServletInitializer {
 //			transportRepository.save(new Transport("fly"));
 //			transportRepository.save(new Transport("bus"));
 //			transportRepository.save(new Transport("train"));
-//		};
-//	}
-//
-//	@Bean
-//	public CommandLineRunner createTestUser(IRegistrationService registrationService){
-//		return (args) -> {
-//			User user = new User();
-//			user.setUsername("c");
-//			user.setPassword("c");
-//			registrationService.save(user, new Carrier());
-//		};
-//	}
-//
-//	@Bean
-//	public CommandLineRunner createTestPassenger(IRegistrationService registrationService){
-//		return (args) -> {
-//			User user = new User();
-//			user.setUsername("p");
-//			user.setPassword("p");
-//			Passenger passenger = new Passenger();
-//			passenger.setF_name("Виталий");
-//			passenger.setL_name("Наливкин");
-//			passenger.setM_name("Игоревич");
-//			passenger.setRating(4.89f);
-//			registrationService.save(user, passenger);
 //		};
 //	}
 //
@@ -152,14 +127,9 @@ public class CompassApplication extends SpringBootServletInitializer {
 //	}
 //
 //	@Bean
-//	public CommandLineRunner createTestRide(IRegistrationService registrationService,
-//											TicketstatusRepository ticketstatusRepository,
-//											TemplateRepository templateRepository,
-//											RideRepository rideRepository,
-//											TicketRepository ticketRepository,
-//											StopRepository stopRepository,
-//											TransportRepository transportRepository){
+//	public CommandLineRunner createTestRide(IRegistrationService registrationService){
 //		return (args) -> {
+//
 //			// Carrier
 //			User userCarrier = new User();
 //			userCarrier.setUsername("cc");
@@ -167,41 +137,6 @@ public class CompassApplication extends SpringBootServletInitializer {
 //			Carrier carrier = new Carrier();
 //			carrier.setTitle("OOO TestCarrier");
 //			registrationService.save(userCarrier, carrier);
-//
-//			// создать шаблон рейса
-//			Template template = new Template();
-//			template.setCountTickets(64);
-//			template.setPrice(500.00f);
-//			template.setTransport(transportRepository.findAll().get(1));
-//			//template.setStops(stopRepository.findAll());
-//			carrier.addChildTemplate(template);
-//			templateRepository.save(template);
-//
-//			// добавить рейс по шаблону
-//			Ride ride = new Ride();
-//			ride.setValid(true);
-//			template.addChildrenRide(ride);
-//			rideRepository.save(ride);
-//
-//			Ride ride2 = new Ride();
-//			ride2.setValid(true);
-//			template.addChildrenRide(ride2);
-//			rideRepository.save(ride2);
-//
-//			// создать шаблон рейса
-//			Template template2 = new Template();
-//			template2.setCountTickets(12);
-//			template2.setPrice(8530.00f);
-//			template2.setTransport(transportRepository.findAll().get(0));
-//			//template2.setStops(stopRepository.findAll());
-//			carrier.addChildTemplate(template2);
-//			templateRepository.save(template2);
-//
-//			// добавить рейс по шаблону
-//			Ride ride3 = new Ride();
-//			ride3.setValid(true);
-//			template2.addChildrenRide(ride3);
-//			rideRepository.save(ride3);
 //
 //			// Passenger
 //			User userPassenger = new User();
@@ -214,13 +149,6 @@ public class CompassApplication extends SpringBootServletInitializer {
 //			passenger.setRating(4.71f);
 //			registrationService.save(userPassenger, passenger);
 //
-//			Ticket ticket = new Ticket();
-//			Ticketstatus ticketstatus = ticketstatusRepository.findByTitle("bought");
-//			List<Integer> freeSeats = ride.getFreeSeats();
-//			Integer seat = freeSeats.get(0);
-//			ticket.Config(ride, passenger, seat, ticketstatus);
-//
-//			ticketRepository.save(ticket);
 //		};
 //	}
 

@@ -1,0 +1,34 @@
+{
+  "features": [
+    {
+      "geometry": {
+        "coordinates": [
+          9.849164,
+          57.092789
+        ],
+        "count": 1,
+        "coordinatesto": [
+          48.228333,
+          30.371111
+        ],
+        "type": "Point"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          9.849164,
+          57.092789
+        ],
+        "count": 8,
+        "coordinatesto": [
+          38.490278,
+          7.067222
+        ],
+        "type": "Point"
+      },
+      "type": "Feature"
+    }
+  ]
+}

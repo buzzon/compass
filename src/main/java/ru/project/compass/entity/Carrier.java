@@ -2,6 +2,8 @@ package ru.project.compass.entity;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -20,7 +22,7 @@ public class Carrier {
     private Pricing pricing;
 
     @OneToMany(mappedBy = "carrier", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Template> templates = new HashSet<>();
+    private List<Template> templates = new LinkedList<>();
 
     private String title;
     private Float rating;
@@ -54,11 +56,11 @@ public class Carrier {
         this.pricing = pricing;
     }
 
-    public Set<Template> getTemplates() {
+    public List<Template> getTemplates() {
         return templates;
     }
 
-    public void setTemplates(Set<Template> templates) {
+    public void setTemplates(List<Template> templates) {
         this.templates = templates;
     }
 

@@ -14,23 +14,33 @@
     <h2>Add template</h2>
     <div class="new_template">
         <form th:action="@{/carrier/tools}" method="post" th:object="${Template}">
-            <div><label> count tickets : <input type="number" th:field="*{countTickets}"/></label></div>
-            <div><label> price : <input type="number" step="0.01" th:field="*{price}"/></label></div>
+            <div><label> count tickets : <input type="number" th:field="*{countTickets}" required/></label></div>
+            <div><label> price : <input type="number" step="0.01" th:field="*{price}" required/></label></div>
 
-<!--            <div><label> Direction:-->
-<!--                <div th:each=" stop : *{stops}">-->
-<!--                    <div th:object="${stop}">-->
-<!--                        stop-->
-<!--                        <select th:field="*{id}">-->
-<!--                            <option th:each="point : ${ALLStops}"-->
-<!--                                    th:value="${point.id}"-->
-<!--                                    th:text="${point.title}">-->
-<!--                            </option>-->
-<!--                        </select>-->
-<!--                    </div>-->
+            <!--start-->
+            <div><label> Direction:
+                <select th:field="*{stops[0].id}">
+                    <option th:each="point : ${ALLStops}"
+                            th:value="${point.id}"
+                            th:text="${point.title}">
+                    </option>
+                </select>
+                <select th:field="*{stops[1].id}">
+                    <option th:each="point : ${ALLStops}"
+                            th:value="${point.id}"
+                            th:text="${point.title}">
+                    </option>
+                </select>
+<!--                <div th:each="task,iter : *{stops}">-->
+<!--                    <div th:text="${task}"></div>-->
+<!--                    <div th:text="${iter.index}"></div>-->
+<!--                    <div th:text="${Template.stops[iter.index].id}"></div>-->
+<!--                    <div th:text="${Template.stops[0].id}"></div>-->
+<!--                    <select th:field="${Template.stops[0].id}">-->
+<!--                    </select>-->
 <!--                </div>-->
-<!--            </label></div>-->
-            <div><input type="submit" value="Add Stop" name="addStop"/></div>
+            </label></div>
+
             <div><label> Choice transport:
                 <select th:field="*{transport.id}">
                     <option th:each="transport : ${Transports}"
@@ -71,9 +81,9 @@
 
                 <h3>Add Ride</h3>
                 <form th:action="@{/carrier/tools}" method="post">
-                    <label>
-                        <input hidden name="templateId" type="number" th:value="*{id}">
-                    </label>
+                    <input hidden name="templateId" type="number" th:value="*{id}">
+                    <label>Отправления: <input name="departureDate" type="datetime-local" required></label> </br>
+                    <label>Возвращение: <input name="returnDate" type="datetime-local" required></label> </br>
                     <input type="submit" value="Add Ride" name="addRide"/>
                 </form>
 
@@ -84,8 +94,8 @@
                             <div th:text="'id: ' + *{id}"></div>
                             <div th:text="'isValid: ' + *{valid}"></div>
                             <div th:text="'discounts: ' + *{discounts}"></div>
-                            <div th:text="'departureDate: ' + *{departureDate}"></div>
-                            <div th:text="'returnDate: ' + *{returnDate}"></div>
+                            <div th:text="'departureDate: ' + ${ride.getDepartureDateStr()}"></div>
+                            <div th:text="'returnDate: ' + ${ride.getReturnDateStr()}"></div>
                             <div th:text="'views: ' + *{views}"></div>
                             <div th:text="'free seats count: ' + *{freeSeats.size()} + '/' + ${template.countTickets}"></div>
                             <div th:text="'free seats: ' + *{freeSeats}"></div>
