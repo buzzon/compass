@@ -11,7 +11,7 @@
 }
 
 .labels {
-    font: 8px sans-serif;
+    font: 2px sans-serif;
     fill: black;
     opacity: .5;
 
@@ -20,7 +20,10 @@
 
 .noclicks { pointer-events:none; }
 
-.point {  opacity:.2; fill: black; }
+.point {
+    opacity:.2;
+    fill: black;
+}
 
 .arcs {
     opacity:.1;
@@ -30,7 +33,7 @@
 
 .flyers {
     stroke-width: 3;
-    opacity: .3;
+    opacity: .5;
     stroke: rgb(0,255,0);
 }
 .arc, .flyer {

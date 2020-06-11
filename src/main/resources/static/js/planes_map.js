@@ -5,7 +5,7 @@
 var width = document.documentElement.clientWidth,
     height = document.documentElement.clientHeight;
 
-// Задаём иатрицу проекции
+// Задаём vатрицу проекции
 var proj = d3.geo.orthographic()
     .translate([width / 2, height / 2])
     .clipAngle(90)  // угол обзора
@@ -14,9 +14,9 @@ var proj = d3.geo.orthographic()
 var sky = d3.geo.orthographic()
     .translate([width / 2, height / 2])
     .clipAngle(90)  // угол обзора
-    .scale(height / 2.5 + height/10);    // высота неба
+    .scale(height / 2.5 + height / 10);    // высота неба
 
-var path = d3.geo.path().projection(proj).pointRadius(5);
+var path = d3.geo.path().projection(proj).pointRadius(3);
 
 var swoosh = d3.svg.line() // рисует по входящим данным парболу
     .x(function(d) { return d[0] })
@@ -35,7 +35,8 @@ var svg = d3.select("body").append("svg")   // добавляем к body svg
 
 queue() // грузим данные
     .defer(d3.json, "https://gist.githubusercontent.com/mbostock/4090846/raw/07e73f3c2d21558489604a0bc434b3a5cf41a867/world-110m.json")
-    .defer(d3.json, "../json/places.json")
+    .defer(d3.json, "../json/places-demo.json")
+    //.defer(d3.json, "../json/places.json")
     .await(ready);
 
 function ready(error, world, places) {
@@ -142,7 +143,7 @@ function ready(error, world, places) {
 }
 
 function color(pts) {
-    var step_count = 10;
+    var step_count = 25;
 
     var r = 20 + (80 / step_count) * pts.count;
     var g = 80 - (80 / step_count) * pts.count;
@@ -172,7 +173,6 @@ function refresh() {
     svg.selectAll(".flyer")
         .attr("d", function(d) { return swoosh(flying_arc(d)) })
         .attr("opacity", function(d) { return fade_at_edge(d) })
-        .attr("stroke-width", function(d) { return d.count > 5 ? d.count - 2 : 2})
 }
 
 function fade_at_edge(d) {
