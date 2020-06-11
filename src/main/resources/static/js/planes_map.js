@@ -1,49 +1,53 @@
-d3.select(window)
-    .on("mousemove", mousemove)
-    .on("mouseup", mouseup);
+ d3.select(window)
+        .on("mousemove", mousemove)
+        .on("mouseup", mouseup);
 
 var width = document.documentElement.clientWidth,
     height = document.documentElement.clientHeight;
 
+// Задаём иатрицу проекции
 var proj = d3.geo.orthographic()
     .translate([width / 2, height / 2])
-    .clipAngle(90)
-    .scale(220);
+    .clipAngle(90)  // угол обзора
+    .scale(height / 2.5);    // размер планеты
 
 var sky = d3.geo.orthographic()
     .translate([width / 2, height / 2])
-    .clipAngle(90)
-    .scale(300);
+    .clipAngle(90)  // угол обзора
+    .scale(height / 2.5 + height/10);    // высота неба
 
-var path = d3.geo.path().projection(proj).pointRadius(2);
+var path = d3.geo.path().projection(proj).pointRadius(5);
 
-var swoosh = d3.svg.line()
+var swoosh = d3.svg.line() // рисует по входящим данным парболу
     .x(function(d) { return d[0] })
     .y(function(d) { return d[1] })
-    .interpolate("cardinal")
-    .tension(.0);
+    .interpolate("cardinal")    // метод отрисовки
+    .tension(.0);               // сглаживание 0.0 => парабола; 1.0 => угол
 
 var links = [],
-    arcLines = [];
+    arcLines = [],
+    dots = [];
 
-var svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .on("mousedown", mousedown);
+var svg = d3.select("body").append("svg")   // добавляем к body svg
+    .attr("width", width)                   // задаём ширину
+    .attr("height", height)                 // задаём высоту
+    .on("mousedown", mousedown);            // подключаем обработчик нажатия мыши
 
-queue()
+queue() // грузим данные
     .defer(d3.json, "https://gist.githubusercontent.com/mbostock/4090846/raw/07e73f3c2d21558489604a0bc434b3a5cf41a867/world-110m.json")
-    .defer(d3.json, "https://raw.githubusercontent.com/buzzon/mysite/master/places.json")
+    .defer(d3.json, "../json/places.json")
     .await(ready);
 
 function ready(error, world, places) {
-    var ocean_fill = svg.append("defs").append("radialGradient")
-        .attr("id", "ocean_fill")
-        .attr("cx", "75%")
-        .attr("cy", "25%");
-    ocean_fill.append("stop").attr("offset", "5%").attr("stop-color", "#fff");
-    ocean_fill.append("stop").attr("offset", "100%").attr("stop-color", "#ababab");
 
+    var ocean_fill = svg.append("defs").append("radialGradient")    // Задаёс груговой градиент
+        .attr("id", "ocean_fill")                                   // Присваиваем ID
+        .attr("cx", "75%")                                          // Задаём позиции
+        .attr("cy", "25%");                                         // Задаём позиции
+    ocean_fill.append("stop").attr("offset", "5%").attr("stop-color", "#fff");      // Устанавливаем фоновый свет (блик)
+    ocean_fill.append("stop").attr("offset", "100%").attr("stop-color", "#ababab"); // Устанавливаем основной цвет моря
+
+    // задаём глобальное освещение
     var globe_highlight = svg.append("defs").append("radialGradient")
         .attr("id", "globe_highlight")
         .attr("cx", "75%")
@@ -55,6 +59,7 @@ function ready(error, world, places) {
         .attr("offset", "100%").attr("stop-color", "#ba9")
         .attr("stop-opacity","0.2");
 
+    // задаём глобальное освещение рисуем псевдо тени
     var globe_shading = svg.append("defs").append("radialGradient")
         .attr("id", "globe_shading")
         .attr("cx", "55%")
@@ -66,91 +71,82 @@ function ready(error, world, places) {
         .attr("offset","100%").attr("stop-color", "#505962")
         .attr("stop-opacity","0.3")
 
-    var drop_shadow = svg.append("defs").append("radialGradient")
-        .attr("id", "drop_shadow")
-        .attr("cx", "50%")
-        .attr("cy", "50%");
-    drop_shadow.append("stop")
-        .attr("offset","20%").attr("stop-color", "#000")
-        .attr("stop-opacity",".5")
-    drop_shadow.append("stop")
-        .attr("offset","100%").attr("stop-color", "#000")
-        .attr("stop-opacity","0")
-
-// Тень
-    svg.append("ellipse")
-        .attr("cx", 440).attr("cy", 450)
-        .attr("rx", proj.scale()*.90)
-        .attr("ry", proj.scale()*.25)
-        .attr("class", "noclicks")
-        .style("fill", "url(#drop_shadow)");
-
-// Закраска океана
+    // океан
     svg.append("circle")
         .attr("cx", width / 2).attr("cy", height / 2)
         .attr("r", proj.scale())
         .attr("class", "noclicks")
         .style("fill", "url(#ocean_fill)");
 
-// Земля
+    // Земля
     svg.append("path")
         .datum(topojson.object(world, world.objects.land))
         .attr("class", "land noclicks")
         .attr("d", path);
 
-// Глобальное освещение
+    // Глобальное освещение
     svg.append("circle")
         .attr("cx", width / 2).attr("cy", height / 2)
         .attr("r", proj.scale())
         .attr("class","noclicks")
         .style("fill", "url(#globe_highlight)");
-// Глобальное освещение
+    // Глобальное освещение тени
     svg.append("circle")
         .attr("cx", width / 2).attr("cy", height / 2)
         .attr("r", proj.scale())
         .attr("class","noclicks")
         .style("fill", "url(#globe_shading)");
 
-// Цвет точки
-    svg.append("g").attr("class","points")
-        .selectAll("text").data(places.features)
-        .enter().append("path")
-        .attr("class", "point")
-        .attr("d", path);
 
     // spawn links between cities as source/target coord pairs
     places.features.forEach(function(a) {
-        places.features.forEach(function(b) {
-            if (a !== b) {
-                links.push({
-                    source: a.geometry.coordinates,
-                    target: b.geometry.coordinates
-                });
-            }
+        links.push({
+            source: a.geometry.coordinates,
+            target: a.geometry.coordinatesto,
+            count: a.geometry.count
         });
+
+        dots.push({ "type": "Feature", "geometry": { "type": "Point", "coordinates": a.geometry.coordinates }});
+        dots.push({ "type": "Feature", "geometry": { "type": "Point", "coordinates": a.geometry.coordinatesto }});
     });
 
     // build geoJSON features from links array
-    links.forEach(function(e,i,a) {
-        var feature =   { "type": "Feature", "geometry": { "type": "LineString", "coordinates": [e.source,e.target] }}
+    links.forEach(function(e) {
+        var feature =   { "type": "Feature", "geometry": { "type": "LineString", "coordinates": [e.source, e.target] }}
         arcLines.push(feature)
     })
 
-// Тень от линий
+    // Тень от линий
     svg.append("g").attr("class","arcs")
         .selectAll("path").data(arcLines)
         .enter().append("path")
         .attr("class","arc")
         .attr("d",path)
 
-// Линии перелётов
+    // Линии перелётов
     svg.append("g").attr("class","flyers")
         .selectAll("path").data(links)
         .enter().append("path")
         .attr("class","flyer")
         .attr("d", function(d) { return swoosh(flying_arc(d)) })
-
+        .attr("stroke", function(d) { return color(d) })
     refresh();
+
+    // Цвет точки
+    svg.append("g")
+        .attr("class","points")
+        .selectAll("text").data(dots)
+        .enter().append("path")
+        .attr("class", "point")
+        .attr("d", path);
+}
+
+function color(pts) {
+    var step_count = 10;
+
+    var r = 20 + (80 / step_count) * pts.count;
+    var g = 80 - (80 / step_count) * pts.count;
+    return "rgb(" + r + ","+ g + ",40)"
 }
 
 function flying_arc(pts) {
@@ -164,8 +160,6 @@ function flying_arc(pts) {
     return result;
 }
 
-
-
 function refresh() {
     svg.selectAll(".land").attr("d", path);
     svg.selectAll(".point").attr("d", path);
@@ -177,19 +171,18 @@ function refresh() {
 
     svg.selectAll(".flyer")
         .attr("d", function(d) { return swoosh(flying_arc(d)) })
-        .attr("opacity", function(d) {
-            return fade_at_edge(d)
-        })
+        .attr("opacity", function(d) { return fade_at_edge(d) })
+        .attr("stroke-width", function(d) { return d.count > 5 ? d.count - 2 : 2})
 }
 
 function fade_at_edge(d) {
-    var centerPos = proj.invert([width/2,height/2]),
+    var centerPos = proj.invert([width/2, height/2]),
         arc = d3.geo.greatArc(),
         start, end;
+
     // function is called on 2 different data structures..
     if (d.source) {
-        start = d.source,
-            end = d.target;
+        start = d.source, end = d.target;
     }
     else {
         start = d.geometry.coordinates[0];
